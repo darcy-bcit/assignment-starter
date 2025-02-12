@@ -1,0 +1,28 @@
+language: C
+projectName: myproject
+types:
+  - name: Person
+    fields:
+      - name: name
+        type: char*
+      - name: age
+        type: int
+      - name: height
+        type: float
+files:
+  - name: person_utils
+    functions:
+      - name: createPerson
+        parameters:
+          - name: name
+            type: const char*
+          - name: age
+            type: int
+          - name: height
+            type: float
+        returnType: Person*
+      - name: printPerson
+        parameters:
+          - name: person
+            type: const Person*
+        returnType: void
