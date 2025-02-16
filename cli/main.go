@@ -6,34 +6,25 @@ import (
 	"github.com/gomutex/godocx"
 )
 
-func main() {
-	// Open an existing DOCX document
-	// document, err := godocx.OpenDocument("./testdata/test.docx")
+const DOCUMENT_DIR string = "./output/report/"
+const DOCUMENT_EXT string = ".docx"
 
-	// Create New Document
+func createDoc(docname string) {
 	document, err := godocx.NewDocument()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Save the modified document to a new file
-	err = document.SaveTo("./output/report/user-guide.docx")
+	err = document.SaveTo(DOCUMENT_DIR + docname + DOCUMENT_EXT)
 	if err != nil {
-		log.Fatal(err)
-	}
 
-	err = document.SaveTo("./output/report/testing.docx")
-	if err != nil {
-		log.Fatal(err)
 	}
+}
 
-	err = document.SaveTo("./output/report/report.docx")
-	if err != nil {
-		log.Fatal(err)
-	}
+func main() {
 
-	err = document.SaveTo("./output/report/design.docx")
-	if err != nil {
-		log.Fatal(err)
-	}
+	createDoc("testing")
+	createDoc("user-guide")
+	createDoc("report")
+	createDoc("design")
 }
