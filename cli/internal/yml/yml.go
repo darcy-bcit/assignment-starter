@@ -32,8 +32,8 @@ func ParseConfig(filename string) (*types.Config, error) {
 
 // basic validation, for now only checks for supported language
 func validateConfig(config *types.Config) error {
-    if config.Path == "" {
-        return fmt.Errorf("path required")
+    if config.ProjectName == "" {
+        return fmt.Errorf("project name required")
     }
 
     if config.Language != "C" {
