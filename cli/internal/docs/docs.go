@@ -14,7 +14,7 @@ var documents = []string{
 	"user-guide.docx",
 }
 
-func createDocs(path string) {
+func CreateDocs(path string) {
 	for _, doc := range documents {
 		document, err := godocx.NewDocument()
 		if err != nil {

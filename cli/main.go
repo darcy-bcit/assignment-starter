@@ -8,6 +8,7 @@ import (
 
 	"github.com/darcy-bcit/assignment-starter/cli/internal/codegen"
 	"github.com/darcy-bcit/assignment-starter/cli/internal/dirgen"
+	"github.com/darcy-bcit/assignment-starter/cli/internal/docs"
 	"github.com/darcy-bcit/assignment-starter/cli/internal/yml"
 )
 
@@ -58,11 +59,13 @@ func main() {
 		}
 	case "docs":
 		// doc gen here
+		docs.CreateDocs(dirManager.GetReportPath())
 	case "all":
 		if err := codeGenerator.Generate(); err != nil {
 			log.Fatalf("Failed to generate code: %v", err)
 		}
 		// doc gen here again
+		docs.CreateDocs(dirManager.GetReportPath())
 	}
 
 	fmt.Printf("Successfully generated %s.\n", *genType)
