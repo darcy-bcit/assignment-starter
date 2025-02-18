@@ -1,0 +1,49 @@
+#MELKE YAML TEMPLATE
+#Please fill in the fields to customize your project generation
+
+#Code Information
+language: C # Specify the programming language for your project
+projectName: exampleProject # Specify the name of your project
+
+types: # Define types used in your project (eg. struct, class)
+  - name: EXAMPLE_TYPE
+    type: struct # Struct/Type/Class/Interface
+    access: # Access modifier (public/private/protected) if needed
+    fields: # Define the fields inside the type
+      - name: username
+        type: string
+      - name: password
+        type: string
+
+files:
+  functions: # Define the functions in your project
+    - name: exampleFunction
+      parameters: # List the parameters that the function takes
+        - name: param1
+          type: int
+        - name: param2
+          type: double
+      returnType: void
+      access: # Access modifier (public/private/protected) if needed
+      comment: |
+        # This function demonstrates an example of how to write function documentation
+        # It accepts two parameters: an integer and a double, and returns nothing.
+      pseudocode: |
+        # 1. Accept two parameters: param1 and param2.
+        # 2. Perform a task or computation using the parameters.
+        # 3. Return nothing (void function).
+
+states: # Define the states in your program
+  - name: EXAMPLE_STATE
+    description: "This is an example of a state"
+    transitions: # List the possible transitions from this state
+      - to: "HOME_STATE"
+        function: goHomeState()
+      - to: "ERROR_STATE"
+        function: handleError()
+
+#File Information
+  #Unfinished
+
+author: MELKE BBY-17
+license: BCIT
