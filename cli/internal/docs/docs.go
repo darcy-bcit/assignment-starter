@@ -2,6 +2,7 @@ package docs
 
 import (
 	"log"
+	"path/filepath"
 
 	"github.com/gomutex/godocx"
 	"github.com/gomutex/godocx/docx"
@@ -20,8 +21,8 @@ func CreateDocs(path string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-
-		err = document.SaveTo(path + doc)
+		docPath := filepath.Join(path, doc)
+		err = document.SaveTo(path + docPath)
 		if err != nil {
 			log.Fatal(err)
 		}
