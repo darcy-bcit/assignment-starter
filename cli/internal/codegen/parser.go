@@ -1,14 +1,14 @@
-// Package yml provides functions to parse the yaml file
-package yml
+package codegen
 
 import (
-	"fmt"
-	"os"
+    "fmt"
+    "os"
 
-	"github.com/darcy-bcit/assignment-starter/cli/internal/yml/types"
-	"github.com/goccy/go-yaml"
+    "github.com/goccy/go-yaml"
+    "github.com/darcy-bcit/assignment-starter/cli/internal/codegen/types"
 )
 
+// parses config.yaml
 func ParseConfig(filename string) (*types.Config, error) {
     data, err := os.ReadFile(filename)
     if err != nil {
@@ -30,14 +30,14 @@ func ParseConfig(filename string) (*types.Config, error) {
     return config, nil
 }
 
-// basic validation, for now only checks for supported language
+// basic validation, for now only checks if empty
 func validateConfig(config *types.Config) error {
     if config.ProjectName == "" {
-        return fmt.Errorf("project name required")
+        return fmt.Errorf("project name is required")
     }
 
     if config.Language != "C" {
-        return fmt.Errorf("unsupported language: %s", config.Language)
+        return fmt.Errorf("only C language is supported in this version")
     }
 
     return nil
