@@ -1,0 +1,73 @@
+language: C
+projectName: shapes
+
+# Type definitions that will be available across files
+types:
+  - name: Point2D
+    fields:
+      - name: x
+        type: double
+      - name: y
+        type: double
+
+  - name: Rectangle
+    fields:
+      - name: position
+        type: Point2D
+      - name: width
+        type: double
+      - name: height
+        type: double
+
+  - name: Circle
+    fields:
+      - name: center
+        type: Point2D
+      - name: radius
+        type: double
+
+# Files to generate with their functions
+files:
+  - name: geometry
+    functions:
+      - name: createPoint
+        parameters:
+          - name: x
+            type: double
+          - name: y
+            type: double
+        returnType: Point2D
+
+      - name: createRectangle
+        parameters:
+          - name: x
+            type: double
+          - name: y
+            type: double
+          - name: width
+            type: double
+          - name: height
+            type: double
+        returnType: Rectangle
+
+      - name: calculateRectangleArea
+        parameters:
+          - name: rect
+            type: const Rectangle*
+        returnType: double
+
+  - name: utils
+    functions:
+      - name: printPoint
+        parameters:
+          - name: point
+            type: const Point2D*
+        returnType: void
+
+      - name: distanceBetweenPoints
+        parameters:
+          - name: p1
+            type: const Point2D*
+          - name: p2
+            type: const Point2D*
+        returnType: double
