@@ -43,7 +43,60 @@ states: # Define the states in your program
         function: handleError()
 
 #File Information
-  #Unfinished
 
+#Design Document
+
+titlepage:
+  name: Pat Doe
+  stdnum: A00000000
+  date: Feb 30th, 2020
+  assignmentname: Assignment 1
+  coursenum: COMP 1234
+
+body:
+  - purpose: "Describe the purpose of the assignment"
+    datatypes:
+      - arguments:
+          - field: argc
+            type: integer
+            description: "The number of arguments"
+        settings:
+          - field: count
+            type: unsigned integer
+            description: "The number of times to display the message"
+        context:
+          - field: arguments
+            type: arguments
+            description: "The command line arguments"
+    pseudocode:
+      - functionname: parse_arguments
+        parameters:
+          - parameter: ctx
+            type: Context
+            description: "The program context"
+        return:
+          - value:
+            reason:
+        pseudocode: |
+          # Write your pseudocode here
+          # Example:
+          call getopt in a loop
+            if opt is ‘h’ 
+              call usage
+            if opt is ‘c’ 
+              set ctx.arguments.count to ctx.argument.argv[optind]
+            If opt is ‘?’ 
+              call usage
+
+          If there are more than 1 unnamed argument 
+            return USAGE
+
+          ctx.arguments.message = ctx.arguments.argv[optind]
+
+          return HANDLE_ARGS
+
+    #Functions, States And State Table filled 
+    #in using the code information above
+        
 author: MELKE BBY-17
 license: BCIT
