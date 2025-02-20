@@ -22,7 +22,7 @@ func CreateDocs(path string) {
 			log.Fatal(err)
 		}
 		docPath := filepath.Join(path, doc)
-		err = document.SaveTo(path + docPath)
+		err = document.SaveTo(docPath)
 		if err != nil {
 			log.Fatal(err)
 		}

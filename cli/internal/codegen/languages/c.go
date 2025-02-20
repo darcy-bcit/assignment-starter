@@ -82,7 +82,7 @@ func (g *CGenerator) generateHeader(file types.FileConfig, types []types.TypeCon
 func (g *CGenerator) generateSource(file types.FileConfig) string {
     var sb strings.Builder
 
-    sb.WriteString(fmt.Sprintf("#include \"%s.h\"\n\n", file.Name))
+    sb.WriteString(fmt.Sprintf("#include \"../include/%s.h\"\n\n", file.Name))
 
     // Generate function implementations
     for _, fn := range file.Functions {
