@@ -15,7 +15,7 @@ types: # Define types used in your project (eg. struct, class)
       - name: password
         type: string
 
-files:
+files: ##MAYBE ADD FILE NAMES / HOW ARE HEADER FILES DECLARED. IS FILES.TXT UPDATED?
   functions: # Define the functions in your project
     - name: exampleFunction
       parameters: # List the parameters that the function takes
@@ -46,17 +46,18 @@ states: # Define the states in your program
 
 #Design Document
 
-titlepage:
+titlepage: #Please Enter The Following Information for the title page
   name: Pat Doe
   stdnum: A00000000
   date: Feb 30th, 2020
   assignmentname: Assignment 1
   coursenum: COMP 1234
 
-body:
+body: 
   - purpose: "Describe the purpose of the assignment"
-    datatypes:
-      - arguments:
+
+    datatypes: #Data Types section of design doc.
+      - arguments: 
           - field: argc
             type: integer
             description: "The number of arguments"
@@ -68,7 +69,8 @@ body:
           - field: arguments
             type: arguments
             description: "The command line arguments"
-    pseudocode:
+            
+    pseudocode: #Pseudocode section
       - functionname: parse_arguments
         parameters:
           - parameter: ctx
@@ -77,9 +79,7 @@ body:
         return:
           - value: DISPLAY_MESSAGE
             reason: "The args are correct"
-        pseudocode: |
-          # Write your pseudocode here
-          # Example:
+        pseudocode: | #Write Pseudocode for the function here
           call getopt in a loop
             if opt is ‘h’ 
               call usage
@@ -97,6 +97,66 @@ body:
 
     #Functions, States And State Table filled 
     #in using the code information above
+
+#Report Document
+
+#Title page information Reused
+
+body: 
+  - purpose: "Describe the purpose of the assignment"
+
+    requirements: #requirements section of report doc.
+      - task: 
+        status:
+          
+    platforms:
+      - linux
+      - macos
+      - freebsd
+    
+    language:
+      - ISO C17
+
+    #figure out how to link documents
+
+    findings:
+
+#User Guide Document
+
+#Title page information Reused
+
+body: 
+  - purpose: "Describe the purpose of the assignment"
+
+    installing: #Data Types section of design doc.
+      - obtaining: | 
+          fill in with how to clone
+
+        building: |
+          fill in with how to build
+
+        running: |
+          fill in with how to run
+
+    environmentvars:
+      - variable: variable
+        purpose: |
+          The purpose of this variable is to variable
+
+    configuration:
+      - variable: variable
+        purpose: |
+          The purpose of this variable is to variable
+
+#Testing Document
+
+#Title page information Reused
+
+body: 
+    - testcases: #test cases for testing doc.
+      - testname: Send empty command
+        expectedres: pass
+        
 
 author: MELKE BBY-17
 license: BCIT
