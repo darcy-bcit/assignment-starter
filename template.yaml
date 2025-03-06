@@ -106,20 +106,21 @@ body:
   - purpose: "Describe the purpose of the assignment"
 
     requirements: #requirements section of report doc.
-      - task: 
-        status:
+      - req: "Describe requirement"
+        status: "Not fully Implemented"
           
-    platforms:
+    platforms: #What platforms does the assignment work on
       - linux
       - macos
       - freebsd
     
-    language:
+    language: #What languages does the assignment work on
       - ISO C17
 
     #figure out how to link documents
 
-    findings:
+    findings: |
+      List findings here
 
 #User Guide Document
 
@@ -138,12 +139,12 @@ body:
         running: |
           fill in with how to run
 
-    environmentvars:
+    environmentvars: # List any environment variables here
       - variable: variable
         purpose: |
           The purpose of this variable is to variable
 
-    configuration:
+    configuration: # List any configurations here
       - variable: variable
         purpose: |
           The purpose of this variable is to variable
