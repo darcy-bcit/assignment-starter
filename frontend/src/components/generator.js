@@ -7,11 +7,39 @@ const Generator = () => {
     // dataTypes is the name of the variable (state)
     // setDataTypes is a function that change the value of the state
     //
-     
+
+    // datatypes: #Data Types section of design doc.
+    // - arguments: 
+    //     - field: argc
+    //       type: integer
+    //       description: "The number of arguments"
+    //   settings:
+    //     - field: count
+    //       type: unsigned integer
+    //       description: "The number of times to display the message"
+    //   context:
+    //     - field: arguments
+    //       type: arguments
+    //       description: "The command line arguments"
+
     const [dataTypes, setDatatypes] = useState([
         { name: 'Field', type: 'text', value: '' },
         { name: 'Type', type: 'text', value: '' },
-        { name: 'Description', type: 'text', value: '' }
+        { name: 'Description', type: 'text', value: '' },
+        {
+            name: 'arguments', type: 'multiple', children: [
+                { name: 'field', type: 'text', value: '' },
+                { name: 'type', type: 'text', value: '' },
+                { name: 'description', type: 'text', value: '' },
+            ]
+        },
+        {
+            name: 'settings', type: 'multiple', children: [
+                { name: 'field', type: 'text', value: '' },
+                { name: 'type', type: 'text', value: '' },
+                { name: 'description', type: 'text', value: '' },
+            ]
+        }
     ]);
 
     const [settings, setSettings] = useState([
@@ -49,8 +77,10 @@ const Generator = () => {
 
     //change the structure of the data from [{ name: '', type: '', value: '' }] to [{the_element_name: the element_value}]
     const restructure = (data) => {
+
         return data.map(ele => ({
-            [ele.name]: ele?.value
+            [ele.name]: ele?.type === 'multiple' ? ele?.children.map((ele2) => ({ [ele2.name]: ele2?.value })) :
+                ele?.value
         }))
     }
 
@@ -58,12 +88,15 @@ const Generator = () => {
     //save the states in an object then dump it for yaml
     const generateYaml = () => {
         const formattedData = {
-            data_types: restructure(dataTypes),
-            settings: restructure(settings),
-            functions: restructure(functions),
-            states: restructure(states),
-            stateTable: restructure(stateTable),
-            pseudocode: restructure(pseudocode) 
+            body : {
+
+                data_types: restructure(dataTypes),
+                settings: restructure(settings),
+                functions: restructure(functions),
+                states: restructure(states),
+                stateTable: restructure(stateTable),
+                pseudocode: restructure(pseudocode)
+            }
         };
 
         const yamlData = yaml.dump(formattedData);
@@ -78,26 +111,26 @@ const Generator = () => {
 
                 {/* <div class="card box-shadow border-0 p-3">
                     <div class="card-body"> */}
-                        {/* component that generate the inputs based on the state */}
+                {/* component that generate the inputs based on the state */}
 
-                        <FormSection data={dataTypes} name={"Data Type"} duplicate={(val) => setDatatypes(val)} />
+                <FormSection data={dataTypes} name={"Data Type"} duplicate={(val) => setDatatypes(val)} />
 
-                        <FormSection data={settings}  name={"Settings"} duplicate={(val) => setSettings(val)} />
+                <FormSection data={settings} name={"Settings"} duplicate={(val) => setSettings(val)} />
 
-                        <FormSection data={functions}  name={"functions"} duplicate={(val) => setFunctions(val)} />
+                <FormSection data={functions} name={"functions"} duplicate={(val) => setFunctions(val)} />
 
-                        <FormSection data={states}  name={"states"} duplicate={(val) => setStates(val)} />
+                <FormSection data={states} name={"states"} duplicate={(val) => setStates(val)} />
 
-                        <FormSection data={stateTable}  name={"stateTable"} duplicate={(val) => setStateTable(val)} />
-
-
-                        <FormSection data={pseudocode}  name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} />
+                <FormSection data={stateTable} name={"stateTable"} duplicate={(val) => setStateTable(val)} />
 
 
-                        <div className="my-2">
-                            <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
-                        </div>
-                    {/* </div>
+                <FormSection data={pseudocode} name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} />
+
+
+                <div className="my-2">
+                    <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
+                </div>
+                {/* </div>
                 </div> */}
             </div>
 
