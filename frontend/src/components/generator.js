@@ -344,13 +344,172 @@ const Generator = () => {
             pseudocode: pseudocodeEntry?.value || ""
         };
     };
+
+
+    const restructureUserGuideBody = (data) => {
+        if (!data || data.length === 0) return {};
+    
+        const purpose = data.find(ele => ele.name === 'purpose')?.value || "";
+    
+        const installingEntry = data.find(ele => ele.name === 'installing');
+        const obtaining = installingEntry?.children.find(child => child.name === 'obtaining')?.value || "";
+        const building = installingEntry?.children.find(child => child.name === 'building')?.value || "";
+        const running = installingEntry?.children.find(child => child.name === 'running')?.value || "";
+    
+        const environmentvarsEntry = data.find(ele => ele.name === 'environmentvars');
+        const environmentvarsList = environmentvarsEntry?.children || [];
+        const environmentvars = [];
+        for (let i = 0; i < environmentvarsList.length; i += 2) {
+            environmentvars.push({
+                variable: environmentvarsList[i]?.value || "",
+                purpose: environmentvarsList[i + 1]?.value || ""
+            });
+        }
+    
+        const configuration = [
+            {
+                variable: "",
+                purpose: ""
+            }
+        ];
+    
+        return {
+            purpose,
+            installing: [
+                {
+                    obtaining: "",
+                    building: "",
+                    running: ""
+                }
+            ],
+            environmentvars,
+            configuration
+        };
+    };
     
     
     
     
+    const restructureReportBody = (data) => {
+        if (!data || data.length === 0) return {};
+    
+        const purpose = data.find(ele => ele.name === 'purpose')?.value || "";
+    
+        const requirementsEntry = data.find(ele => ele.name === 'requirements');
+        const requirementsList = requirementsEntry?.children || [];
+        const requirements = [];
+        for (let i = 0; i < requirementsList.length; i += 2) {
+            requirements.push({
+                req: requirementsList[i]?.value || "",
+                status: requirementsList[i + 1]?.value || ""
+            });
+        }
+    
+        const platformsEntry = data.find(ele => ele.name === 'platforms');
+        const platforms = (platformsEntry?.children || []).map(child => child.value || "");
+    
+        const languageEntry = data.find(ele => ele.name === 'language');
+        const languageList = (languageEntry?.children || []).map(lang => lang.value || "");
+    
+        const findings = data.find(ele => ele.name === 'findings')?.value || "";
+    
+        return {
+            purpose,
+            requirements,
+            platforms,
+            language: languageList,
+            findings
+        };
+    };
+
+
+
+
+    const restructureTestingBody = (data) => {
+        if (!data || data.length === 0) return {};
+    
+        const testcasesEntry = data.find(ele => ele.name === 'testcases');
+        const testcasesList = testcasesEntry?.children || [];
+    
+        const testcases = [];
+        for (let i = 0; i < testcasesList.length; i += 2) {
+            testcases.push({
+                testname: testcasesList[i]?.value || "",
+                expectedres: testcasesList[i + 1]?.value || ""
+            });
+        }
+    
+        return {
+            testcases
+        };
+    };
+    
+    
+
+    const [reportBody, setReportBody] = useState([
+        { name: 'purpose', type: 'textarea', value: '' },
+        {
+            name: 'requirements',
+            type: 'multiple',
+            children: [
+                { name: 'req', type: 'text', value: '' },
+                { name: 'status', type: 'text', value: '' }
+            ]
+        },
+        {
+            name: 'platforms',
+            type: 'multiple',
+            children: [
+                { name: 'platform', type: 'textarea', value: '' }
+            ]
+        },
+        {
+            name: 'language',
+            type: 'multiple',
+            children: [
+                { name: 'language', type: 'textarea', value: '' }
+            ]
+        },
+        { name: 'findings', type: 'textarea', value: '' }
+    ]);
     
     
     
+    const [userGuideBody, setUserGuideBody] = useState([
+        { name: 'purpose', type: 'textarea', value: '' },
+        {
+            name: 'installing', type: 'multiple', children: [
+                { name: 'obtaining', type: 'textarea', value: '' },
+                { name: 'building', type: 'textarea', value: '' },
+                { name: 'running', type: 'textarea', value: '' }
+            ]
+        },
+        {
+            name: 'environmentvars', type: 'multiple', children: [
+                { name: 'variable', type: 'text', value: '' },
+                { name: 'purpose', type: 'textarea', value: '' }
+            ]
+        },
+        {
+            name: 'configuration', type: 'multiple', children: [
+                { name: 'variable', type: 'text', value: '' },
+                { name: 'purpose', type: 'textarea', value: '' }
+            ]
+        }
+    ]);
+    
+    
+    
+    const [testingBody, setTestingBody] = useState([
+        {
+            name: 'testcases', 
+            type: 'multiple', 
+            children: [
+                { name: 'testname', type: 'text', value: '' },
+                { name: 'expectedres', type: 'text', value: '' },
+            ]
+        }
+    ]);
     
     
     
@@ -386,14 +545,41 @@ const Generator = () => {
                 purpose: restructure(purpose),
                 dataTypes: [restructure(dataTypes)],
                 pseudocode: [restructurePseudocode(pseudocode)]
+               
                 
-            }
-        ]
+                
+                }
+            
+            ]
+
+        };
+
+        const formattedData2 = {
+            
+            body : [restructureReportBody(reportBody)]
+            
+        };
+
+        const formattedData3 = {
+            
+            body : [restructureUserGuideBody(userGuideBody)]
+            
+        };
+
+        const formattedData4 = {
+            
+            body : [restructureTestingBody(testingBody)]
+            
         };
 
         const yamlData = yaml.dump(formattedData);
+        const yamlData2 = yaml.dump(formattedData2);
+        const yamlData3 = yaml.dump(formattedData3);
+        const yamlData4 = yaml.dump(formattedData4);
 
-        console.log(yamlData);
+        
+
+        console.log(yamlData + "\n" + yamlData2 + "\n" + yamlData3 + "\n" + yamlData4);
         alert(yamlData);
     };
 
@@ -436,6 +622,13 @@ const Generator = () => {
 
 
                 <FormSection data={pseudocode} name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} />
+
+                <FormSection data={reportBody} name={"reportBody"} duplicate={(val) => setReportBody(val)} />
+
+                <FormSection data={userGuideBody} name={"userGuideBody"} duplicate={(val) => setUserGuideBody(val)} />
+
+                <FormSection data={testingBody} name={"testingBody"} duplicate={(val) => setTestingBody(val)} />
+
 
 
                 <div className="my-2">
