@@ -523,7 +523,28 @@ const Generator = () => {
     
     
     
-    
+        // use this functin to check if a field is empty. The yaml will not generate
+        const validateNotEmpty = (data, fieldName) => {
+            if (!data || data.trim().length === 0) {
+            alert(`${fieldName} cannot be empty.`);
+            return false;
+            }
+            return true;
+        };
+
+        const isValidName = (name, fieldName) => {
+            if (!name) return false; // Already checked in previous step
+          
+            const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/; // Must start with a letter or underscore, no special chars
+            
+            if (!validPattern.test(name)) {
+              alert(`${fieldName} contains invalid characters. Use only letters, numbers, and underscores (cannot start with a number).`);
+              return false;
+            }
+          
+            return true;
+          };
+          
      
     
     
@@ -532,6 +553,19 @@ const Generator = () => {
 
     //save the states in an object then dump it for yaml
     const generateYaml = () => {
+
+
+        // This finds the field you want to check 
+        const pseudoCodeFuncName = pseudocode.find(ele => ele.name === 'functionname')?.value;
+
+
+        //Checks if it is empty 
+        if (!validateNotEmpty(pseudoCodeFuncName, "Pseudocode function name")) {
+            return; // Stop here if invalid
+        }
+
+        // checks for invalid characters
+        if (!isValidName(pseudoCodeFuncName, "Pseudocode function name")) return;
 
         const formattedData = {
             language: restructure(language),
@@ -582,6 +616,10 @@ const Generator = () => {
         console.log(yamlData + "\n" + yamlData2 + "\n" + yamlData3 + "\n" + yamlData4);
         alert(yamlData);
     };
+
+
+    
+  
 
     return (
         <>
