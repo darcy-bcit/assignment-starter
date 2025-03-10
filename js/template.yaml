@@ -1,0 +1,33 @@
+language:
+projectName:
+
+files:
+  - name:
+    dependencies:
+    types:
+      - name:
+        dataType:
+        access:
+        fields:
+          - name:
+            type:
+            access:
+    functions:
+      - name:
+        parameters:
+          - name:
+            type:
+        returnType:
+        access:
+        comment:
+        pseudocode:
+
+states:
+  - name:
+    description:
+    transitions:
+      - to:
+        function:
+
+author:
+license:

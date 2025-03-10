@@ -1,0 +1,84 @@
+language: c
+projectName: TestProject
+
+files:
+  - name: utils
+    dependencies: []
+    types:
+      - name: Config
+        dataType: struct
+        access: public
+        fields:
+          - name: name
+            type: char*
+            access: public
+          - name: value
+            type: int
+            access: public
+    functions:
+      - name: parse_args
+        parameters:
+          - name: argc
+            type: int
+          - name: argv
+            type: char**
+        returnType: int
+        access: public
+        comment: Parse command line arguments
+        pseudocode: |
+          Check number of arguments
+          Process each argument
+          Return success or error code
+  - name: message
+    dependencies: []
+    functions:
+      - name: display_message
+        parameters:
+          - name: msg
+            type: char*
+        returnType: void
+        access: public
+        comment: Display a message to the user
+        pseudocode: |
+          Print message to stdout
+
+states:
+  - name: START
+    description: Entry point of the program
+    transitions:
+      - to: PARSE_ARGS
+        function: parse_args
+  - name: PARSE_ARGS
+    description: Parse command line arguments
+    transitions:
+      - to: HANDLE_ARGS
+        function: handle_args
+      - to: USAGE
+        function: usage
+  - name: HANDLE_ARGS
+    description: Process command line arguments
+    transitions:
+      - to: DISPLAY_MESSAGE
+        function: display_message
+      - to: USAGE
+        function: usage
+  - name: DISPLAY_MESSAGE
+    description: Show message to user
+    transitions:
+      - to: CLEANUP
+        function: cleanup
+  - name: CLEANUP
+    description: Clean up resources
+    transitions:
+      - to: EXIT
+        function: exit
+  - name: USAGE
+    description: Display usage information
+    transitions:
+      - to: EXIT
+        function: exit
+  - name: EXIT
+    description: Exit the program
+
+author: Test User
+license: MIT
