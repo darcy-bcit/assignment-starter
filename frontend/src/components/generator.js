@@ -22,10 +22,6 @@ const Generator = () => {
     //       type: arguments
     //       description: "The command line arguments"
 
-    
-
-    
-
     const [settings, setSettings] = useState([
         { name: 'Field', type: 'text', value: '' },
         { name: 'Type', type: 'text', value: '' },
@@ -40,10 +36,6 @@ const Generator = () => {
         { name: 'Project Name', type: 'text', value: '' }
     ]);
 
-
-
-    
-
     const [types, setTypes] = useState([
         { name: 'name', type: 'text', value: '' },  // Simple key-value pairs
         { name: 'type', type: 'text', value: '' },  // ✅ Rename 'type' to 'type_name'
@@ -57,8 +49,6 @@ const Generator = () => {
     ]);
 
     //FILES thing????
-
-
     // const [functions, setFunctions] = useState([
     //     { name: 'name', type: 'text', value: '' },  // Simple key-value pairs
     //     { name: 'parameters', type: 'multiple', children:[
@@ -71,7 +61,6 @@ const Generator = () => {
     //     { name: 'pseudocode', type: 'textarea', value: '' },
         
     // ]);
-
 
     const [files, setFiles] = useState([
         { name: 'name', type: 'text', value: '' }, // single file name field
@@ -91,10 +80,6 @@ const Generator = () => {
             ]
         }
     ]);
-
-
-
-
 
     const restructureFiles = (files) => {
         const fileNameEntry = files.find(f => f.name === 'name');
@@ -123,41 +108,9 @@ const Generator = () => {
             }] : []
         }];
     };
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
-
-
-
-
-
 
     const [states, setStates] = useState([
-        { name: 'name', type: 'text', value: '' },
+        { name: 'From State', type: 'text', value: '' },
         { name: 'description', type: 'text', value: '' },
         { name: 'transitions', type: 'multiple', children:[
             { name: 'to', type: 'text', value: '' },
@@ -174,7 +127,6 @@ const Generator = () => {
         { name: 'coursenum', type: 'text', value: '' }
 
     ]);
-
 
     const [purpose, setPurpose] = useState([
         { name: 'purpose', type: 'textarea', value: '' }
@@ -201,13 +153,11 @@ const Generator = () => {
 
     ]);
 
-
     const [stateTable, setStateTable] = useState([
         { name: 'From State', type: 'text', value: '' },
         { name: 'To State', type: 'text', value: '' },
         { name: 'Function', type: 'text', value: '' }
     ]);
-
 
     const [pseudocode, setPseudocode] = useState([
         { name: 'functionname', type: 'text', value: '' },
@@ -223,9 +173,6 @@ const Generator = () => {
         { name: 'pseudocode', type: 'textarea', value: '' },
     ]);
     
-
-
-
     //change the structure of the data from [{ name: '', type: '', value: '' }] to [{the_element_name: the element_value}]
     const restructure = (data) => {
         if (!data || data.length === 0) return "";
@@ -305,8 +252,6 @@ const Generator = () => {
             return acc;
         }, {});
     };
-    
-    
         
     const restructurePseudocode = (data) => {
         if (!data || data.length === 0) return [];
@@ -344,7 +289,6 @@ const Generator = () => {
             pseudocode: pseudocodeEntry?.value || ""
         };
     };
-
 
     const restructureUserGuideBody = (data) => {
         if (!data || data.length === 0) return {};
@@ -386,10 +330,7 @@ const Generator = () => {
             configuration
         };
     };
-    
-    
-    
-    
+  
     const restructureReportBody = (data) => {
         if (!data || data.length === 0) return {};
     
@@ -422,9 +363,6 @@ const Generator = () => {
         };
     };
 
-
-
-
     const restructureTestingBody = (data) => {
         if (!data || data.length === 0) return {};
     
@@ -443,8 +381,6 @@ const Generator = () => {
             testcases
         };
     };
-    
-    
 
     const [reportBody, setReportBody] = useState([
         { name: 'purpose', type: 'textarea', value: '' },
@@ -473,8 +409,6 @@ const Generator = () => {
         { name: 'findings', type: 'textarea', value: '' }
     ]);
     
-    
-    
     const [userGuideBody, setUserGuideBody] = useState([
         { name: 'purpose', type: 'textarea', value: '' },
         {
@@ -498,8 +432,6 @@ const Generator = () => {
         }
     ]);
     
-    
-    
     const [testingBody, setTestingBody] = useState([
         {
             name: 'testcases', 
@@ -510,62 +442,170 @@ const Generator = () => {
             ]
         }
     ]);
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        // use this functin to check if a field is empty. The yaml will not generate
-        const validateNotEmpty = (data, fieldName) => {
-            if (!data || data.trim().length === 0) {
-            alert(`${fieldName} cannot be empty.`);
-            return false;
-            }
-            return true;
-        };
 
-        const isValidName = (name, fieldName) => {
-            if (!name) return false; // Already checked in previous step
-          
-            const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/; // Must start with a letter or underscore, no special chars
-            
-            if (!validPattern.test(name)) {
-              alert(`${fieldName} contains invalid characters. Use only letters, numbers, and underscores (cannot start with a number).`);
-              return false;
-            }
-          
-            return true;
-          };
-          
-     
-    
-    
-    
+  // use this functin to check if a field is empty. The yaml will not generate
+  const validateNotEmpty = (data, fieldName) => {
+      if (!data || data.trim().length === 0) {
+      alert(`${fieldName} cannot be empty.`);
+      return false;
+      }
+      return true;
+  };
 
+     const isValidName = (name, fieldName) => {
+      if (!name) return false; // Already checked in previous step
 
+      const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/; // Must start with a letter or underscore, no special chars
+
+      if (!validPattern.test(name)) {
+        alert(`${fieldName} contains invalid characters. Use only letters, numbers, and underscores (cannot start with a number).`);
+        return false;
+      }
+
+      return true;
+    };
+      
     //save the states in an object then dump it for yaml
     const generateYaml = () => {
 
+        //Language paramter must be filled
+        if (!validateNotEmpty(language[0].value, "Language")) return;
 
-        // This finds the field you want to check 
-        const pseudoCodeFuncName = pseudocode.find(ele => ele.name === 'functionname')?.value;
+        //Project Name parameter must be filled and have valid syntax
+        if (!validateNotEmpty(projectName[0].value, "Project Name")) return;
+        if (!isValidName(projectName[0].value, "Project Name")) return;
 
+        //Validation for the types section (need to refactor this to be more dynamic and also less confusing of the user)
+        types.forEach(child => {
+          //Deal with the nested object differently here
+          if (child.name === "fields" && Array.isArray(child.children)) {
+              child.children.forEach(child => {
+                if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
+                if (!isValidName(child.value, `Types section ${child.name}`)) return;
+              });
+          } else {
+            if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
+            if (!isValidName(child.value, `Types section ${child.name}`)) return;
+          }
+        });
+      
+        //No validation needed for the settings section
 
-        //Checks if it is empty 
-        if (!validateNotEmpty(pseudoCodeFuncName, "Pseudocode function name")) {
-            return; // Stop here if invalid
-        }
+        //Validation for the files section
+        files.forEach(child => {
+          //Deal with nested object differently here
+          if (child.name === "functions" && Array.isArray(child.children)) {
+            child.children.forEach(child => {
+              if (child.name === "parameters" && Array.isArray(child.children)) {
+                //There needs to be another loop here to deal with the nested parameters object
+                console.log("skippped files parameters");
+              } else {
+                if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
+                if (!isValidName(child.value, `Files section ${child.name}`)) return;
+              }
+            });
+          } else {
+            if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
+            if (!isValidName(child.value, `Files section ${child.name}`)) return;
+          }
+        })
 
-        // checks for invalid characters
-        if (!isValidName(pseudoCodeFuncName, "Pseudocode function name")) return;
+        //Validation for the states section
+        states.forEach(child => {
+          //Deal with the nested object differently here
+          if (child.name === "transitions" && Array.isArray(child.children)) {
+              child.children.forEach(child => {
+                //Deal with the nested object differently here
+                console.log("skippped states section transitions");
+              });
+          } else {
+            if (child.name === "From State") {
+              if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
+              if (!isValidName(child.value, `States section ${child.name}`)) return;
+            }
+            if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
+          }
+        });
+
+        //Validation for the title page section
+        titlePage.forEach(child => {
+          if (!validateNotEmpty(child.value, `Title Page section ${child.name}`)) return;
+        });
+
+        //Validation for project purpose section
+        purpose.forEach(child => {
+          if (!validateNotEmpty(child.value, `Purpose section ${child.name}`)) return;
+        });
+      
+        console.log(dataTypes);
+        //Validation for the data types section
+        dataTypes.forEach(child => {
+          //Deal with the nested object differently here
+          child.children.forEach(child => {
+            if (child.name === "Description") {
+              if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
+            } else {
+              if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
+              if (!isValidName(child.value, `Data Types section ${child.name}`)) return;
+            }
+          });
+        });
+
+        //Validation for stateTable section may or may not be needed???
+
+        //Validation for the pseudocode section
+        pseudocode.forEach(child => {
+          if (child.children && Array.isArray(child.children)) {
+            child.children.forEach(child => {
+              if (child.name === "description" || child.name === "reason") {
+                if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+              } else {
+                if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+                if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
+              }
+            })
+          } else {
+            if (child.name === "functionname") {
+              if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+              if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
+            } else {
+              if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+            }
+          }
+        });
+
+        //Validation for the report body section
+        reportBody.forEach(child => {
+          if (child.children && Array.isArray(child.children)) {
+            child.children.forEach(child => {
+              if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
+            })
+          } else {
+            if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
+          }
+        });
+
+        //Validation for the user guide body section
+        userGuideBody.forEach(child => {
+          if (child.children && Array.isArray(child.children)) {
+            child.children.forEach(child => {
+              if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
+            })
+          } else {
+            if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
+          }
+        });
+
+        //Validation for the testing body section
+        testingBody.forEach(child => {
+          if (child.children && Array.isArray(child.children)) {
+            child.children.forEach(child => {
+              if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
+            })
+          } else {
+            if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
+          }
+        });
 
         const formattedData = {
             language: restructure(language),
@@ -579,9 +619,6 @@ const Generator = () => {
                 purpose: restructure(purpose),
                 dataTypes: [restructure(dataTypes)],
                 pseudocode: [restructurePseudocode(pseudocode)]
-               
-                
-                
                 }
             
             ]
@@ -611,15 +648,9 @@ const Generator = () => {
         const yamlData3 = yaml.dump(formattedData3);
         const yamlData4 = yaml.dump(formattedData4);
 
-        
-
         console.log(yamlData + "\n" + yamlData2 + "\n" + yamlData3 + "\n" + yamlData4);
-        alert(yamlData);
+        alert("YAML generated successfully. Check the console for the output.");
     };
-
-
-    
-  
 
     return (
         <>
@@ -635,17 +666,11 @@ const Generator = () => {
 
                 <FormSection data={types} name={"Types"} duplicate={(val) => setTypes(val)} />
 
-
-
-
                 <FormSection data={settings} name={"Settings"} duplicate={(val) => setSettings(val)} />
 
                 {/* <FormSection data={functions} name={"functions"} duplicate={(val) => setFunctions(val)} /> */}
 
                 <FormSection data={files} name={"files"} duplicate={(val) => setFiles(val)} />
-
-
-
 
                 <FormSection data={states} name={"states"} duplicate={(val) => setStates(val)} />
 
@@ -655,9 +680,7 @@ const Generator = () => {
 
                 <FormSection data={dataTypes} name={"dataTypes"} duplicate={(val) => setDataTypes(val)} />
 
-
                 <FormSection data={stateTable} name={"stateTable"} duplicate={(val) => setStateTable(val)} />
-
 
                 <FormSection data={pseudocode} name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} />
 
@@ -667,21 +690,14 @@ const Generator = () => {
 
                 <FormSection data={testingBody} name={"testingBody"} duplicate={(val) => setTestingBody(val)} />
 
-
-
                 <div className="my-2">
-                    
                     <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
                 </div>
                 {/* </div>
                 </div> */}
             </div>
-
-
         </>
     );
 };
-
-
 
 export default Generator;
