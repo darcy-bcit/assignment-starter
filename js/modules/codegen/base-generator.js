@@ -12,7 +12,7 @@ class BaseGenerator {
         await this.createSourceDirs(projectDir);
 
         for (const fileConfig of config.files) {
-            await this.generateFile(fileConfig, config, projectDir);
+            await this.generateFile(fileConfig, projectDir);
         }
 
         await this.generateMainFile(config, projectDir);

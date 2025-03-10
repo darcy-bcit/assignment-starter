@@ -3,8 +3,6 @@ const BaseGenerator = require('./base-generator');
 
 class CGenerator extends BaseGenerator {
     async createSourceDirs(projectDir) {
-        await fs.mkdir(path.join(projectDir, 'source', 'src'), { recursive: true });
-        await fs.mkdir(path.join(projectDir, 'source', 'include'), { recursive: true });
     }
 
     async generateFile(fileConfig, projectDir) {
@@ -27,7 +25,7 @@ class CGenerator extends BaseGenerator {
         // dependencies
         if (fileConfig.dependencies && fileConfig.dependencies.length > 0) {
             for (const dep of fileConfig.dependencies) {
-                content += `<include "${dep}.h>\n`;
+                content += `#include <${dep}.h>\n`;
             }
             content += '\n';
         }
@@ -43,6 +41,9 @@ class CGenerator extends BaseGenerator {
         // function sigs
         if (fileConfig.functions && fileConfig.functions.length > 0) {
             for (const func of fileConfig.functions) {
+                if (func.access === 'static') {
+                    continue;
+                }
                 content += this.generateFunctionPrototype(func);
                 content += '\n';
             }
@@ -149,7 +150,10 @@ class CGenerator extends BaseGenerator {
         let content = '';
 
         const returnType = func.returnType || 'void';
-        const access = func.access ? `${func.access} ` : ''; // static maybe
+        let access = func.access ? `${func.access} ` : ''; // static maybe
+        if (access === 'public') {
+            access = '';
+        }
 
         content += `${access}${returnType} ${func.name}(`;
 
@@ -166,13 +170,17 @@ class CGenerator extends BaseGenerator {
         let content = '';
 
         const returnType = func.returnType || 'void';
+        let access = func.access ? `${func.access} ` : ''; // static maybe
+        if (access === 'public') {
+            access = '';
+        }
 
         // add the description comment
         if (func.comment) {
             content += `/**\n * ${func.comment}\n */\n`;
         }
 
-        content += `${returnType} ${func.name}(`;
+        content += `${access} ${returnType} ${func.name}(`;
 
         if (func.parameters && func.parameters.length > 0) {
             content += func.parameters.map(param => `${param.type} ${param.name}`).join(', ');

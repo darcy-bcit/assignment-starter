@@ -38,13 +38,11 @@ async function prepareProjectDirectory(projectDir) {
 }
 
 async function createDirectoryStructure(projectDir) {
-    await fs.mkdir(path.join(projectDir, 'source', { recursive: true }));
-    /*
+    //await fs.mkdir(path.join(projectDir, 'source', { recursive: true }));
     await fs.mkdir(path.join(projectDir, 'source', 'src'), { recursive: true });
     await fs.mkdir(path.join(projectDir, 'source', 'include'), { recursive: true });
     await fs.mkdir(path.join(projectDir, 'source', 'modules'), { recursive: true });
     await fs.mkdir(path.join(projectDir, 'source', 'internal'), { recursive: true });
-    */
     await fs.mkdir(path.join(projectDir, 'report'), { recursive: true });
 }
 
