@@ -151,7 +151,7 @@ class CGenerator extends BaseGenerator {
 
         const returnType = func.returnType || 'void';
         let access = func.access ? `${func.access} ` : ''; // static maybe
-        if (access === 'public') {
+        if (access === 'public ') {
             access = '';
         }
 
@@ -171,7 +171,7 @@ class CGenerator extends BaseGenerator {
 
         const returnType = func.returnType || 'void';
         let access = func.access ? `${func.access} ` : ''; // static maybe
-        if (access === 'public') {
+        if (access === 'public ') {
             access = '';
         }
 
@@ -180,7 +180,7 @@ class CGenerator extends BaseGenerator {
             content += `/**\n * ${func.comment}\n */\n`;
         }
 
-        content += `${access} ${returnType} ${func.name}(`;
+        content += `${access}${returnType} ${func.name}(`;
 
         if (func.parameters && func.parameters.length > 0) {
             content += func.parameters.map(param => `${param.type} ${param.name}`).join(', ');
