@@ -16,22 +16,23 @@ types: # Define types used in your project (eg. struct, class)
         type: string
 
 files: ##MAYBE ADD FILE NAMES / HOW ARE HEADER FILES DECLARED. IS FILES.TXT UPDATED?
-  functions: # Define the functions in your project
-    - name: exampleFunction
-      parameters: # List the parameters that the function takes
-        - name: param1
-          type: int
-        - name: param2
-          type: double
-      returnType: void
-      access: # Access modifier (public/private/protected) if needed
-      comment: |
-        # This function demonstrates an example of how to write function documentation
-        # It accepts two parameters: an integer and a double, and returns nothing.
-      pseudocode: |
-        # 1. Accept two parameters: param1 and param2.
-        # 2. Perform a task or computation using the parameters.
-        # 3. Return nothing (void function).
+  - name: geometry
+    functions: # Define the functions in your project
+      - name: exampleFunction
+        parameters: # List the parameters that the function takes
+          - name: param1
+            type: int
+          - name: param2
+            type: double
+        returnType: void
+        access: # Access modifier (public/private/protected) if needed
+        comment: |
+          # This function demonstrates an example of how to write function documentation
+          # It accepts two parameters: an integer and a double, and returns nothing.
+        pseudocode: |
+          # 1. Accept two parameters: param1 and param2.
+          # 2. Perform a task or computation using the parameters.
+          # 3. Return nothing (void function).
 
 states: # Define the states in your program
   - name: EXAMPLE_STATE
@@ -69,31 +70,32 @@ body:
           - field: arguments
             type: arguments
             description: "The command line arguments"
-            
-    pseudocode: #Pseudocode section
-      - functionname: parse_arguments
-        parameters:
-          - parameter: ctx
-            type: Context
-            description: "The program context"
-        return:
-          - value: DISPLAY_MESSAGE
-            reason: "The args are correct"
-        pseudocode: | #Write Pseudocode for the function here
-          call getopt in a loop
-            if opt is ‘h’ 
-              call usage
-            if opt is ‘c’ 
-              set ctx.arguments.count to ctx.argument.argv[optind]
-            If opt is ‘?’ 
-              call usage
 
-          If there are more than 1 unnamed argument 
-            return USAGE
+    ##REDUNDANT: CAN BE BE FOUND IN CODE INFO SECTION      
+    # pseudocode: #Pseudocode section
+    #   - functionname: parse_arguments
+    #     parameters:
+    #       - parameter: ctx
+    #         type: Context
+    #         description: "The program context"
+    #     return:
+    #       - value: DISPLAY_MESSAGE
+    #         reason: "The args are correct"
+    #     pseudocode: | #Write Pseudocode for the function here
+    #       call getopt in a loop
+    #         if opt is ‘h’ 
+    #           call usage
+    #         if opt is ‘c’ 
+    #           set ctx.arguments.count to ctx.argument.argv[optind]
+    #         If opt is ‘?’ 
+    #           call usage
 
-          ctx.arguments.message = ctx.arguments.argv[optind]
+    #       If there are more than 1 unnamed argument 
+    #         return USAGE
 
-          return HANDLE_ARGS
+    #       ctx.arguments.message = ctx.arguments.argv[optind]
+
+    #       return HANDLE_ARGS
 
     #Functions, States And State Table filled 
     #in using the code information above
@@ -103,7 +105,8 @@ body:
 #Title page information Reused
 
 body: 
-  - purpose: "Describe the purpose of the assignment"
+
+    #Purpose Reused from design doc
 
     requirements: #requirements section of report doc.
       - req: "Describe requirement"
@@ -127,7 +130,8 @@ body:
 #Title page information Reused
 
 body: 
-  - purpose: "Describe the purpose of the assignment"
+    
+    #Purpose Reused from design doc
 
     installing: #Data Types section of design doc.
       - obtaining: | 
