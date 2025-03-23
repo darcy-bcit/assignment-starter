@@ -74,32 +74,62 @@ const Generator = () => {
     ]);
 
     const restructureFiles = (files) => {
-        const fileNameEntry = files.find(f => f.name === 'name');
-        const functionsEntry = files.find(f => f.name === 'functions');
+        if (!files || files.length === 0) return [];
     
-        return [{
-            name: fileNameEntry?.value || "",
-            functions: functionsEntry?.children ? [{
-                name: functionsEntry.children.find(child => child.name === 'name')?.value || "",
-                parameters: (() => {
-                    const paramEntry = functionsEntry.children.find(child => child.name === 'parameters');
-                    if (!paramEntry || !paramEntry.children) return [];
-                    let params = [];
-                    for (let i = 0; i < paramEntry.children.length; i += 2) {
-                        params.push({
-                            name: paramEntry.children[i]?.value || "",
-                            type: paramEntry.children[i + 1]?.value || "",
+        const fileGroups = [];
+        let i = 0;
+    
+        while (i < files.length) {
+            const file = files[i];
+            const functionsEntry = files[i + 1]; // Next entry is expected to be functions
+    
+            if (file.name === 'name' && functionsEntry?.name === 'functions') {
+                const fileName = file.value || '';
+                const functions = [];
+    
+                const children = functionsEntry.children || [];
+                for (let j = 0; j < children.length; j += 6) {
+                    const func = children.slice(j, j + 6);
+                    const name = func.find(f => f.name === 'name')?.value || '';
+                    const returnType = func.find(f => f.name === 'returnType')?.value || '';
+                    const access = func.find(f => f.name === 'access')?.value || '';
+                    const comment = func.find(f => f.name === 'comment')?.value || '';
+                    const pseudocode = func.find(f => f.name === 'pseudocode')?.value || '';
+    
+                    const paramEntry = func.find(f => f.name === 'parameters');
+                    const parameters = [];
+                    const paramChildren = paramEntry?.children || [];
+                    for (let k = 0; k < paramChildren.length; k += 2) {
+                        parameters.push({
+                            name: paramChildren[k]?.value || '',
+                            type: paramChildren[k + 1]?.value || ''
                         });
                     }
-                    return params;
-                })(),
-                returnType: functionsEntry.children.find(child => child.name === 'returnType')?.value || "",
-                access: functionsEntry.children.find(child => child.name === 'access')?.value || "",
-                comment: functionsEntry.children.find(child => child.name === 'comment')?.value || "",
-                pseudocode: functionsEntry.children.find(child => child.name === 'pseudocode')?.value || "",
-            }] : []
-        }];
+    
+                    functions.push({
+                        name,
+                        parameters,
+                        returnType,
+                        access,
+                        comment,
+                        pseudocode
+                    });
+                }
+    
+                fileGroups.push({
+                    name: fileName,
+                    functions
+                });
+    
+                i += 2;
+            } else {
+                i++;
+            }
+        }
+    
+        return fileGroups;
     };
+    
 
     const [states, setStates] = useState([
         { name: 'From State', type: 'text', value: '' },
@@ -345,28 +375,38 @@ const Generator = () => {
     const restructureStates = (data) => {
         if (!data || data.length === 0) return [];
     
-        const name = data.find(d => d.name === 'From State')?.value || '';
-        const description = data.find(d => d.name === 'description')?.value || '';
+        const states = [];
+        let i = 0;
     
-        const transitionsField = data.find(d => d.name === 'transitions');
-        const transitions = [];
+        while (i < data.length) {
+            const currentState = data.slice(i, i + 3); // Expecting From State, description, transitions
     
-        if (transitionsField && Array.isArray(transitionsField.children)) {
-            for (let i = 0; i < transitionsField.children.length; i += 2) {
-                transitions.push({
-                    to: transitionsField.children[i]?.value || '',
-                    function: transitionsField.children[i + 1]?.value || ''
-                });
+            const name = currentState.find(d => d.name === 'From State')?.value || '';
+            const description = currentState.find(d => d.name === 'description')?.value || '';
+            const transitionsEntry = currentState.find(d => d.name === 'transitions');
+            const transitions = [];
+    
+            if (transitionsEntry && Array.isArray(transitionsEntry.children)) {
+                for (let j = 0; j < transitionsEntry.children.length; j += 2) {
+                    transitions.push({
+                        to: transitionsEntry.children[j]?.value || '',
+                        function: transitionsEntry.children[j + 1]?.value || ''
+                    });
+                }
             }
+    
+            states.push({
+                name,
+                description,
+                transitions
+            });
+    
+            i += 3;
         }
     
-        //return a flat array with a single object
-        return [{
-            name,
-            description,
-            transitions
-        }];
+        return states;
     };
+    
 
     const restructureTypes = (data) => {
         if (!data || data.length === 0) return [];
