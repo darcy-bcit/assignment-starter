@@ -101,6 +101,15 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
       );
   };    
 
+  //This helper function is purely for front end layout purposes. It will chunk the array into smaller arrays so the layour remains consistent.
+  const chunkArray = (array, chunkSize) => {
+    const chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      chunks.push(array.slice(i, i + chunkSize));
+    }
+    return chunks;
+  };
+
   return (
     <div className="my-4 border-bottom-ch ">
       <h2 className="black font-size-20">{name}</h2>
