@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import FormSection from "./form_section";
 import yaml from "js-yaml";
 import '../styles/generator.css'
+
+//change to true to bypass all validation checks 
+const devMode = false;
+
+
 const Generator = () => {
     // react hook that saves a state 
     // dataTypes is the name of the variable (state)
@@ -207,7 +212,7 @@ const Generator = () => {
                     }).filter(func => func !== null);
                 }
     
-                // ✅ CORRECTED THIS PART SPECIFICALLY:
+                // CORRECTED THIS PART SPECIFICALLY:
                 else if (['arguments', 'settings', 'context'].includes(ele.name)) {
                     acc[ele.name] = [];
     
@@ -318,7 +323,6 @@ const Generator = () => {
         ];
     
         return {
-            purpose,
             installing: [
                 {
                     obtaining: "",
@@ -330,6 +334,35 @@ const Generator = () => {
             configuration
         };
     };
+
+
+    const restructureStates = (data) => {
+        if (!data || data.length === 0) return [];
+    
+        const name = data.find(d => d.name === 'From State')?.value || '';
+        const description = data.find(d => d.name === 'description')?.value || '';
+    
+        const transitionsField = data.find(d => d.name === 'transitions');
+        const transitions = [];
+    
+        if (transitionsField && Array.isArray(transitionsField.children)) {
+            for (let i = 0; i < transitionsField.children.length; i += 2) {
+                transitions.push({
+                    to: transitionsField.children[i]?.value || '',
+                    function: transitionsField.children[i + 1]?.value || ''
+                });
+            }
+        }
+    
+        // ✅ Return a flat array with a single object
+        return [{
+            name,
+            description,
+            transitions
+        }];
+    };
+    
+    
   
     const restructureReportBody = (data) => {
         if (!data || data.length === 0) return {};
@@ -355,7 +388,6 @@ const Generator = () => {
         const findings = data.find(ele => ele.name === 'findings')?.value || "";
     
         return {
-            purpose,
             requirements,
             platforms,
             language: languageList,
@@ -468,157 +500,160 @@ const Generator = () => {
     //save the states in an object then dump it for yaml
     const generateYaml = () => {
 
-        //Language paramter must be filled
-        if (!validateNotEmpty(language[0].value, "Language")) return;
+        if(!devMode) {
 
-        //Project Name parameter must be filled and have valid syntax
-        if (!validateNotEmpty(projectName[0].value, "Project Name")) return;
-        if (!isValidName(projectName[0].value, "Project Name")) return;
+            //Language paramter must be filled
+            if (!validateNotEmpty(language[0].value, "Language")) return;
 
-        //Validation for the types section (need to refactor this to be more dynamic and also less confusing of the user)
-        types.forEach(child => {
-          //Deal with the nested object differently here
-          if (child.name === "fields" && Array.isArray(child.children)) {
-              child.children.forEach(child => {
+            //Project Name parameter must be filled and have valid syntax
+            if (!validateNotEmpty(projectName[0].value, "Project Name")) return;
+            if (!isValidName(projectName[0].value, "Project Name")) return;
+
+            //Validation for the types section (need to refactor this to be more dynamic and also less confusing of the user)
+            types.forEach(child => {
+            //Deal with the nested object differently here
+            if (child.name === "fields" && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                    if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
+                    if (!isValidName(child.value, `Types section ${child.name}`)) return;
+                });
+            } else {
                 if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
                 if (!isValidName(child.value, `Types section ${child.name}`)) return;
-              });
-          } else {
-            if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
-            if (!isValidName(child.value, `Types section ${child.name}`)) return;
-          }
-        });
-      
-        //No validation needed for the settings section
+            }
+            });
+        
+            //No validation needed for the settings section
 
-        //Validation for the files section
-        files.forEach(child => {
-          //Deal with nested object differently here
-          if (child.name === "functions" && Array.isArray(child.children)) {
-            child.children.forEach(child => {
-              if (child.name === "parameters" && Array.isArray(child.children)) {
-                //There needs to be another loop here to deal with the nested parameters object
-                console.log("skippped files parameters");
-              } else {
+            //Validation for the files section
+            files.forEach(child => {
+            //Deal with nested object differently here
+            if (child.name === "functions" && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                if (child.name === "parameters" && Array.isArray(child.children)) {
+                    //There needs to be another loop here to deal with the nested parameters object
+                    console.log("skippped files parameters");
+                } else {
+                    if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
+                    if (!isValidName(child.value, `Files section ${child.name}`)) return;
+                }
+                });
+            } else {
                 if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
                 if (!isValidName(child.value, `Files section ${child.name}`)) return;
-              }
-            });
-          } else {
-            if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
-            if (!isValidName(child.value, `Files section ${child.name}`)) return;
-          }
-        })
-
-        //Validation for the states section
-        states.forEach(child => {
-          //Deal with the nested object differently here
-          if (child.name === "transitions" && Array.isArray(child.children)) {
-              child.children.forEach(child => {
-                //Deal with the nested object differently here
-                console.log("skippped states section transitions");
-              });
-          } else {
-            if (child.name === "From State") {
-              if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
-              if (!isValidName(child.value, `States section ${child.name}`)) return;
             }
-            if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
-          }
-        });
+            })
 
-        //Validation for the title page section
-        titlePage.forEach(child => {
-          if (!validateNotEmpty(child.value, `Title Page section ${child.name}`)) return;
-        });
-
-        //Validation for project purpose section
-        purpose.forEach(child => {
-          if (!validateNotEmpty(child.value, `Purpose section ${child.name}`)) return;
-        });
-      
-        console.log(dataTypes);
-        //Validation for the data types section
-        dataTypes.forEach(child => {
-          //Deal with the nested object differently here
-          child.children.forEach(child => {
-            if (child.name === "Description") {
-              if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
+            //Validation for the states section
+            states.forEach(child => {
+            //Deal with the nested object differently here
+            if (child.name === "transitions" && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                    //Deal with the nested object differently here
+                    console.log("skippped states section transitions");
+                });
             } else {
-              if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
-              if (!isValidName(child.value, `Data Types section ${child.name}`)) return;
+                if (child.name === "From State") {
+                if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
+                if (!isValidName(child.value, `States section ${child.name}`)) return;
+                }
+                if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
             }
-          });
-        });
+            });
 
-        //Validation for stateTable section may or may not be needed???
+            //Validation for the title page section
+            titlePage.forEach(child => {
+            if (!validateNotEmpty(child.value, `Title Page section ${child.name}`)) return;
+            });
 
-        //Validation for the pseudocode section
-        pseudocode.forEach(child => {
-          if (child.children && Array.isArray(child.children)) {
+            //Validation for project purpose section
+            purpose.forEach(child => {
+            if (!validateNotEmpty(child.value, `Purpose section ${child.name}`)) return;
+            });
+        
+            console.log(dataTypes);
+            //Validation for the data types section
+            dataTypes.forEach(child => {
+            //Deal with the nested object differently here
             child.children.forEach(child => {
-              if (child.name === "description" || child.name === "reason") {
-                if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-              } else {
+                if (child.name === "Description") {
+                if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
+                } else {
+                if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
+                if (!isValidName(child.value, `Data Types section ${child.name}`)) return;
+                }
+            });
+            });
+
+            //Validation for stateTable section may or may not be needed???
+
+            //Validation for the pseudocode section
+            pseudocode.forEach(child => {
+            if (child.children && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                if (child.name === "description" || child.name === "reason") {
+                    if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+                } else {
+                    if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+                    if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
+                }
+                })
+            } else {
+                if (child.name === "functionname") {
                 if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
                 if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
-              }
-            })
-          } else {
-            if (child.name === "functionname") {
-              if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-              if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
-            } else {
-              if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+                } else {
+                if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
+                }
             }
-          }
-        });
+            });
 
-        //Validation for the report body section
-        reportBody.forEach(child => {
-          if (child.children && Array.isArray(child.children)) {
-            child.children.forEach(child => {
-              if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
-            })
-          } else {
-            if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
-          }
-        });
+            //Validation for the report body section
+            reportBody.forEach(child => {
+            if (child.children && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
+                })
+            } else {
+                if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
+            }
+            });
 
-        //Validation for the user guide body section
-        userGuideBody.forEach(child => {
-          if (child.children && Array.isArray(child.children)) {
-            child.children.forEach(child => {
-              if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
-            })
-          } else {
-            if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
-          }
-        });
+            //Validation for the user guide body section
+            userGuideBody.forEach(child => {
+            if (child.children && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
+                })
+            } else {
+                if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
+            }
+            });
 
-        //Validation for the testing body section
-        testingBody.forEach(child => {
-          if (child.children && Array.isArray(child.children)) {
-            child.children.forEach(child => {
-              if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
-            })
-          } else {
-            if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
-          }
-        });
+            //Validation for the testing body section
+            testingBody.forEach(child => {
+            if (child.children && Array.isArray(child.children)) {
+                child.children.forEach(child => {
+                if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
+                })
+            } else {
+                if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
+            }
+            });
+        }
 
         const formattedData = {
             language: restructure(language),
             projectName: restructure(projectName),
             types: [restructure(types)],
             files: restructureFiles(files),
-            states: [restructure(states)],
+            states: restructureStates(states),
             titlePage: restructure(titlePage),
             body : [
                 {
                 purpose: restructure(purpose),
                 dataTypes: [restructure(dataTypes)],
-                pseudocode: [restructurePseudocode(pseudocode)]
+                // pseudocode: [restructurePseudocode(pseudocode)]
                 }
             
             ]
@@ -627,13 +662,13 @@ const Generator = () => {
 
         const formattedData2 = {
             
-            body : [restructureReportBody(reportBody)]
+            body : restructureReportBody(reportBody)
             
         };
 
         const formattedData3 = {
             
-            body : [restructureUserGuideBody(userGuideBody)]
+            body : restructureUserGuideBody(userGuideBody)
             
         };
 
@@ -682,7 +717,7 @@ const Generator = () => {
 
                 <FormSection data={stateTable} name={"stateTable"} duplicate={(val) => setStateTable(val)} />
 
-                <FormSection data={pseudocode} name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} />
+                {/* <FormSection data={pseudocode} name={"Pseudocode"} duplicate={(val) => setPseudocode(val)} /> */}
 
                 <FormSection data={reportBody} name={"reportBody"} duplicate={(val) => setReportBody(val)} />
 
