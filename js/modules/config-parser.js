@@ -29,6 +29,16 @@ function validateConfig(config) {
     if (!config.states || !Array.isArray(config.files)) {
         throw new Error('Config must include a "states" array');
     }
+
+    // init empty arrays if missing
+    for (const file of config.files) {
+        if (!file.types) {
+            file.types = [];
+        }
+        if (!file.functions) {
+            file.functions = [];
+        }
+    }
 }
 
 module.exports = {

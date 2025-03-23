@@ -3,6 +3,12 @@ const BaseGenerator = require('./base-generator');
 
 class CGenerator extends BaseGenerator {
     async createSourceDirs(projectDir) {
+        const fs = require('fs').promises;
+        await fs.mkdir(path.join(projectDir, 'source', 'src'),  { recursive: true });
+        await fs.mkdir(path.join(projectDir, 'source', 'include'),  { recursive: true });
+
+        // gen report dir, tho might not be needed
+        await fs.mkdir(path.join(projectDir, 'report'),  { recursive: true });
     }
 
     async generateFile(fileConfig, projectDir) {
@@ -11,7 +17,6 @@ class CGenerator extends BaseGenerator {
         }
 
         await this.generateHeaderFile(fileConfig, projectDir);
-
         await this.generateImplementationFile(fileConfig, projectDir);
     }
 
@@ -22,13 +27,9 @@ class CGenerator extends BaseGenerator {
         let content = `#ifndef ${fileConfig.name.toUpperCase()}_H\n`;
         content += `#define ${fileConfig.name.toUpperCase()}_H\n\n`;
 
-        // dependencies
-        if (fileConfig.dependencies && fileConfig.dependencies.length > 0) {
-            for (const dep of fileConfig.dependencies) {
-                content += `#include <${dep}.h>\n`;
-            }
-            content += '\n';
-        }
+        content += '#include <stdio.h>\n';
+        content += '#include <stdlib.h>\n';
+        content += '#include <string.h>\n\n';
 
         // structs
         if (fileConfig.types && fileConfig.types.length > 0) {
@@ -58,12 +59,7 @@ class CGenerator extends BaseGenerator {
         const sourceName = `${fileConfig.name}.c`;
         const sourcePath = path.join(projectDir, 'source', 'src', sourceName);
 
-        let content = `#include "../include/${fileConfig.name}.h"\n`;
-
-        // standard library
-        content += '#include <stdio.h>\n';
-        content += '#include <stdlib.h>\n';
-        content += '#include <string.h>\n';
+        let content = `#include "../include/${fileConfig.name}.h"\n\n`;
 
         // function skeletons
         if (fileConfig.functions && fileConfig.functions.length > 0) {
@@ -188,7 +184,7 @@ class CGenerator extends BaseGenerator {
 
         content += ')\n{\n';
 
-        // add psedocode as a comment
+        // add pseudocode as a comment
         if (func.pseudocode) {
             const lines = func.pseudocode.split('\n');
             for (const line of lines) {

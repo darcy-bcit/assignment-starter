@@ -3,7 +3,6 @@ projectName:
 
 files:
   - name:
-    dependencies:
     types:
       - name:
         dataType:

@@ -3,7 +3,6 @@ projectName: TestProject
 
 files:
   - name: utils
-    dependencies: []
     types:
       - name: Config
         dataType: struct
@@ -30,7 +29,6 @@ files:
           Process each argument
           Return success or error code
   - name: message
-    dependencies: []
     functions:
       - name: display_message
         parameters:

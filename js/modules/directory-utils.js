@@ -29,21 +29,13 @@ async function prepareProjectDirectory(projectDir) {
             }
         }
 
-        await createDirectoryStructure(projectDir);
+        await fs.mkdir(path.join(projectDir, 'source', { recursive: true }));
+        await fs.mkdir(path.join(projectDir, 'report'), { recursive: true });
 
         return projectDir;
     } catch (error) {
         throw error;
     }
-}
-
-async function createDirectoryStructure(projectDir) {
-    //await fs.mkdir(path.join(projectDir, 'source', { recursive: true }));
-    await fs.mkdir(path.join(projectDir, 'source', 'src'), { recursive: true });
-    await fs.mkdir(path.join(projectDir, 'source', 'include'), { recursive: true });
-    await fs.mkdir(path.join(projectDir, 'source', 'modules'), { recursive: true });
-    await fs.mkdir(path.join(projectDir, 'source', 'internal'), { recursive: true });
-    await fs.mkdir(path.join(projectDir, 'report'), { recursive: true });
 }
 
 async function clearDirectory(dir) {
