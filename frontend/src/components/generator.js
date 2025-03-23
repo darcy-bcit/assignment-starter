@@ -60,10 +60,10 @@ const Generator = () => {
             name: 'functions',
             type: 'multiple', // Multiple functions per file
             children: [
-                { name: 'name', type: 'text', value: '' },
+                { name: 'functionName', type: 'text', value: '' },
                 { name: 'parameters', type: 'multiple', children: [ // multiple parameters
-                    { name: 'name', type: 'text', value: '' },
-                    { name: 'type', type: 'text', value: '' },
+                    { name: 'parameterName', type: 'text', value: '' },
+                    { name: 'parameterType', type: 'text', value: '' },
                 ]},
                 { name: 'returnType', type: 'text', value: '' },
                 { name: 'access', type: 'text', value: '' },
@@ -786,7 +786,7 @@ const Generator = () => {
 
                 <FormSection data={language} name={"Language"} duplicate={(val) => setLanguage(val)} />
 
-                <FormSection data={projectName} name={"Project Name"} duplicate={(val) => setProjectName(val)} />
+                <FormSection data={projectName} name={"Project Name"} duplicate={(val) => setProjectName(val)} allowAddMore={false} />
 
                 <FormSection data={types} name={"Types"} duplicate={(val) => setTypes(val)} />
 

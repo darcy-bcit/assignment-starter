@@ -1,115 +1,107 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
-const FormSection = ({ data, duplicate, name }) => {
-    //save the original data in a state (shallowCopy)
-    const [shallowCopy, setshallowCopy] = useState(data)
-    const [fields, setFields] = useState(data);
+const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
+  //save the original data in a state (shallowCopy)
+  const [shallowCopy, setshallowCopy] = useState(data)
+  const [fields, setFields] = useState(data);
 
-    //react hook that will be invoked whenever fields value changes
-    //when useEffect invoked it will call duplicate which is a function from the parent component
-    useEffect(() => {
-        duplicate(fields)
-    }, [fields])
+  // Store the original data in a ref so that it doesn't change on re-renders.
+  const initialData = useRef(data);
 
+  //react hook that will be invoked whenever fields value changes
+  //when useEffect invoked it will call duplicate which is a function from the parent component
+  useEffect(() => {
+      duplicate(fields)
+  }, [fields])
 
- 
+  //when typing in the input, we saves the value inside the element based on its index
+  const onChange = (data, index) => {
+      setFields(prev =>
+          prev.map((ele, index2) => index === index2 ? { ...ele, value: data?.target?.value } : ele)
+      );
+  }
 
-    //when typing in the input, we saves the value inside the element based on its index
-    const onChange = (data, index) => {
-        setFields(prev =>
-            prev.map((ele, index2) => index === index2 ? { ...ele, value: data?.target?.value } : ele)
-        );
-    }
-
-    const onChangeChild = (data, index, index2) => {
-        setFields(prev =>
-            prev.map((ele, i) =>
-                i === index
-                    ? {
-                        ...ele,
-                        children: ele.children.map((child, j) =>
-                            j === index2 ? { ...child, value: data?.target?.value } : child
-                        ),
-                    }
-                    : ele
-            )
-        );
-    };
-
-
-
-        const deepCopyField = (field) => {
-            const copy = { ...field };
-            if (field.type === 'multiple' && Array.isArray(field.children)) {
-                copy.children = field.children.map(child => ({ ...child }));
-            }
-            return copy;
-        };
-        
-        const fieldTemplate = data.map(deepCopyField);
-        
-        const addFields = () => {
-            const duplicated = fieldTemplate.map(deepCopyField);
-            setFields(prev => [...prev, ...duplicated]);
-        };
-        
-        const onAddMoreFields = (index) => {
-            setFields(prevFields =>
-                prevFields.map((ele, i) => {
-                    if (i !== index || !ele.children) return ele;
-
-      let newChildSet;
-
-      // Specific handling for configuration (and similar sections)
-      if (ele.name === 'configuration' || ele.name === 'environmentvars') {
-        newChildSet = ele.children.slice(0, 2).map(child => ({
-          ...child,
-          value: ''
-        }));
-      } else {
-        // Original logic for other sections (types, etc.)
-        newChildSet = ele.children.map(child => ({
-          ...child,
-          value: ''
-        }));
-      }
-
-      return {
-        ...ele,
-        children: [...ele.children, ...newChildSet]
-      };
-    })
-  );
-};
-
-const onChangeGrandChild = (data, index, childIndex, grandChildIndex) => {
-    setFields(prev =>
-      prev.map((ele, i) =>
-        i === index
-          ? {
-              ...ele,
-              children: ele.children.map((child, j) =>
-                j === childIndex
+  const onChangeChild = (data, index, index2) => {
+      setFields(prev =>
+          prev.map((ele, i) =>
+              i === index
                   ? {
-                      ...child,
-                      children: child.children.map((gc, k) =>
-                        k === grandChildIndex ? { ...gc, value: data.target.value } : gc
+                      ...ele,
+                      children: ele.children.map((child, j) =>
+                          j === index2 ? { ...child, value: data?.target?.value } : child
                       ),
-                    }
-                  : child
-              ),
-            }
-          : ele
-      )
-    );
-};
+                  }
+                  : ele
+          )
+      );
+  };
 
-        
+  const deepCopyField = (field) => {
+      const copy = { ...field };
+      if (field.type === 'multiple' && Array.isArray(field.children)) {
+          copy.children = field.children.map(child => ({ ...child }));
+      }
+      return copy;
+  };
+  
+  const addFields = () => {
+    //We duplicate the original data so the number of added fields is consistent. (for the large parent)
+      const duplicated = initialData.current.map(deepCopyField);
+      setFields(prev => [...prev, ...duplicated]);
+  };
+  
+  const onAddMoreFields = (index) => {
+      setFields(prevFields =>
+          prevFields.map((ele, i) => {
+              if (i !== index || !ele.children) return ele;
 
-    
-      
+              let newChildSet;
 
-return (
+              // Specific handling for configuration (and similar sections)
+              if (ele.name === 'configuration' || ele.name === 'environmentvars') {
+                newChildSet = ele.children.slice(0, 2).map(child => ({
+                  ...child,
+                  value: ''
+                }));
+              } else {
+                // Original logic for other sections (types, etc.)
+                newChildSet = ele.children.map(child => ({
+                  ...child,
+                  value: ''
+                }));
+              }
+
+              return {
+                ...ele,
+                children: [...ele.children, ...newChildSet]
+              };
+          })
+      );
+  };
+
+  const onChangeGrandChild = (data, index, childIndex, grandChildIndex) => {
+      setFields(prev =>
+        prev.map((ele, i) =>
+          i === index
+            ? {
+                ...ele,
+                children: ele.children.map((child, j) =>
+                  j === childIndex
+                    ? {
+                        ...child,
+                        children: child.children.map((gc, k) =>
+                          k === grandChildIndex ? { ...gc, value: data.target.value } : gc
+                        ),
+                      }
+                    : child
+                ),
+              }
+            : ele
+        )
+      );
+  };    
+
+  return (
     <div className="my-4 border-bottom-ch ">
       <h2 className="black font-size-20">{name}</h2>
       <form>
@@ -235,17 +227,19 @@ return (
             )
           )}
         </div>
-  
-        <button
-          type="button"
-          onClick={addFields}
-          className="btn btn-secondary w-100 border-raduis-20"
-        >
-          Add More Fields
-        </button>
-      </form>
-    </div>
-  );
+        {/* Check if a section is supposed to be able to add a new field. eg. language vs project name.*/}
+        {allowAddMore && (
+          <button
+            type="button"
+            onClick={addFields}
+            className="btn btn-secondary w-100 border-raduis-20"
+          >
+            Add More Fields
+          </button>
+        )}
+        </form>
+      </div>
+    );
   
 };
 
