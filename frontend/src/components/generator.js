@@ -351,12 +351,17 @@ const Generator = () => {
             });
         }
     
-        const configuration = [
-            {
-                variable: "",
-                purpose: ""
-            }
-        ];
+        const configurationEntry = data.find(ele => ele.name === 'configuration');
+        const configurationList = configurationEntry?.children || [];
+        const configuration = [];
+
+        for (let i = 0; i < configurationList.length; i += 2) {
+        configuration.push({
+            variable: configurationList[i]?.value || "",
+            purpose: configurationList[i + 1]?.value || ""
+        });
+        }
+
     
         return {
             installing: [

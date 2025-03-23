@@ -54,19 +54,35 @@ const FormSection = ({ data, duplicate, name }) => {
         };
         
         const onAddMoreFields = (index) => {
-            const original = fieldTemplate[index]; // this is safe
-            if (!original?.children || original.children.length === 0) return;
-        
-            const newChildren = original.children.map(child => ({ ...child }));
-        
-            setFields(prev =>
-                prev.map((ele, i) =>
-                    i === index && ele.type === 'multiple'
-                        ? { ...ele, children: [...ele.children, ...newChildren] }
-                        : ele
-                )
+            setFields(prevFields =>
+              prevFields.map((ele, i) => {
+                if (i !== index || !ele.children) return ele;
+          
+                let newChildSet;
+          
+                // Specific handling for configuration (and similar sections)
+                if (ele.name === 'configuration' || ele.name === 'environmentvars') {
+                  newChildSet = ele.children.slice(0, 2).map(child => ({
+                    ...child,
+                    value: ''
+                  }));
+                } else {
+                  // Original logic for other sections (types, etc.)
+                  newChildSet = ele.children.map(child => ({
+                    ...child,
+                    value: ''
+                  }));
+                }
+          
+                return {
+                  ...ele,
+                  children: [...ele.children, ...newChildSet]
+                };
+              })
             );
-        };
+          };
+          
+          
         
 
     
