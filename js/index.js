@@ -4,7 +4,7 @@ const cli = require('./modules/cli');
 const configParser = require('./modules/config-parser');
 const dirUtils = require('./modules/directory-utils');
 const codegen = require('./modules/codegen');
-const docgen = require('./modules/docgen')
+const docgen = require('./modules/docgen');
 
 async function main() {
     try {
@@ -36,7 +36,7 @@ async function main() {
         // gen docs
         if (args.generate === 'docs' || args.generate === 'all') {
             // TODO evin-gg: docx stuff here
-            await docgen.generateDocs();
+            await docgen.generateDocs(config, projectDir);
             console.log(`Documentation generation completed`);
         }
 
