@@ -4,7 +4,7 @@ import yaml from "js-yaml";
 import '../styles/generator.css'
 
 //change to true to bypass all validation checks 
-const devMode = false;
+const devMode = true;
 
 
 const Generator = () => {
@@ -43,7 +43,7 @@ const Generator = () => {
 
     const [types, setTypes] = useState([
         { name: 'name', type: 'text', value: '' },  // Simple key-value pairs
-        { name: 'type', type: 'text', value: '' },  // ✅ Rename 'type' to 'type_name'
+        { name: 'type', type: 'text', value: '' }, 
         { name: 'access', type: 'text', value: '' },
         {
             name: 'fields', type: 'multiple', children: [
@@ -53,19 +53,6 @@ const Generator = () => {
         }
     ]);
 
-    //FILES thing????
-    // const [functions, setFunctions] = useState([
-    //     { name: 'name', type: 'text', value: '' },  // Simple key-value pairs
-    //     { name: 'parameters', type: 'multiple', children:[
-    //         { name: 'name', type: 'text', value: '', isSingle: false },
-    //         { name: 'type', type: 'text', value: '', isSingle: false }
-    //     ] },  
-    //     { name: 'returnType', type: 'text', value: '' },
-    //     { name: 'access', type: 'text', value: '' },
-    //     { name: 'comment', type: 'textarea', value: '' },
-    //     { name: 'pseudocode', type: 'textarea', value: '' },
-        
-    // ]);
 
     const [files, setFiles] = useState([
         { name: 'name', type: 'text', value: '' }, // single file name field
@@ -224,6 +211,25 @@ const Generator = () => {
                         });
                     }
                 }
+
+                    //new handle "fields" (used in types)
+                    else if (ele.name === 'fields') {
+                        acc[ele.name] = [];
+                    
+                        for (let i = 0; i < ele.children.length; i++) {
+                            const curr = ele.children[i];
+                            const next = ele.children[i + 1];
+                    
+                            if (curr?.name === 'name' && next?.name === 'type') {
+                                acc[ele.name].push({
+                                    name: curr?.value || "",
+                                    type: next?.value || ""
+                                });
+                                i++; // skip the 'type' since we already used it
+                            }
+                        }
+                    }
+                    
     
                 else if (ele.name === 'parameters') {
                     acc[ele.name] = [];
@@ -354,13 +360,51 @@ const Generator = () => {
             }
         }
     
-        // ✅ Return a flat array with a single object
+        //return a flat array with a single object
         return [{
             name,
             description,
             transitions
         }];
     };
+
+    const restructureTypes = (data) => {
+        if (!data || data.length === 0) return [];
+    
+        const result = [];
+    
+        for (let i = 0; i < data.length; i += 4) {
+            const nameEntry = data[i];
+            const typeEntry = data[i + 1];
+            const accessEntry = data[i + 2];
+            const fieldsEntry = data[i + 3];
+    
+            const fields = [];
+            if (fieldsEntry?.children) {
+                for (let j = 0; j < fieldsEntry.children.length; j++) {
+                    const name = fieldsEntry.children[j];
+                    const type = fieldsEntry.children[j + 1];
+                    if (name?.name === 'name' && type?.name === 'type') {
+                        fields.push({
+                            name: name.value || '',
+                            type: type.value || ''
+                        });
+                        j++; // skip the next one (already used)
+                    }
+                }
+            }
+    
+            result.push({
+                name: nameEntry?.value || '',
+                type: typeEntry?.value || '',
+                access: accessEntry?.value || '',
+                fields
+            });
+        }
+    
+        return result;
+    };
+    
     
     
   
@@ -645,7 +689,7 @@ const Generator = () => {
         const formattedData = {
             language: restructure(language),
             projectName: restructure(projectName),
-            types: [restructure(types)],
+            types: restructureTypes(types),
             files: restructureFiles(files),
             states: restructureStates(states),
             titlePage: restructure(titlePage),

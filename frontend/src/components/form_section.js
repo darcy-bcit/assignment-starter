@@ -12,13 +12,7 @@ const FormSection = ({ data, duplicate, name }) => {
     }, [fields])
 
 
-    const addFields = () => {
-        setFields(prevSettings => [
-            ...prevSettings,
-            ...shallowCopy
-        ]);
-
-    }
+ 
 
     //when typing in the input, we saves the value inside the element based on its index
     const onChange = (data, index) => {
@@ -44,11 +38,39 @@ const FormSection = ({ data, duplicate, name }) => {
 
 
 
-    const onAddMoreFields = (index) => {
-        setFields(prevSettings =>
-            prevSettings.map((ele, index2) => index2 === index ? { ...ele, children: [...ele.children, ...shallowCopy[index].children] } : ele)
-        );
-    }
+        const deepCopyField = (field) => {
+            const copy = { ...field };
+            if (field.type === 'multiple' && Array.isArray(field.children)) {
+                copy.children = field.children.map(child => ({ ...child }));
+            }
+            return copy;
+        };
+        
+        const fieldTemplate = data.map(deepCopyField);
+        
+        const addFields = () => {
+            const duplicated = fieldTemplate.map(deepCopyField);
+            setFields(prev => [...prev, ...duplicated]);
+        };
+        
+        const onAddMoreFields = (index) => {
+            const original = fieldTemplate[index]; // this is safe
+            if (!original?.children || original.children.length === 0) return;
+        
+            const newChildren = original.children.map(child => ({ ...child }));
+        
+            setFields(prev =>
+                prev.map((ele, i) =>
+                    i === index && ele.type === 'multiple'
+                        ? { ...ele, children: [...ele.children, ...newChildren] }
+                        : ele
+                )
+            );
+        };
+        
+
+    
+      
 
     return (
         <div className="my-4 border-bottom-ch ">
