@@ -137,7 +137,7 @@ class GoGenerator extends BaseGenerator {
 
     async generateGoMod(config, projectDir) {
         const goModPath = path.join(projectDir, 'source', 'go.mod');
-        const moduleImportPath = config.moduleImportPath || `github.com/example/${config.projectName}`;
+        const moduleImportPath = config.githubPath || `github.com/example/${config.projectName}`;
 
         let content = `module ${moduleImportPath}\n\n`;
         content += 'go 1.24.1\n'; // Using a recent Go version

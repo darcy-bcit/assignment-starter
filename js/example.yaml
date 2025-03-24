@@ -1,5 +1,6 @@
 language: c
 projectName: TestProject
+githubPath: github.com/darcy-bcit/sample # Optional: github.com/username/projectname -- primarily for Go
 
 files:
   - name: utils

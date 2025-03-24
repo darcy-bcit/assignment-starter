@@ -29,7 +29,7 @@ async function prepareProjectDirectory(projectDir) {
             }
         }
 
-        await fs.mkdir(path.join(projectDir, 'source', { recursive: true }));
+        await fs.mkdir(path.join(projectDir, 'source'), { recursive: true });
         await fs.mkdir(path.join(projectDir, 'report'), { recursive: true });
 
         return projectDir;
