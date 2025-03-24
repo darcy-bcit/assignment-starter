@@ -1,0 +1,169 @@
+#MELKE YAML TEMPLATE
+#Please fill in the fields to customize your project generation
+
+author: Pat Doe
+studentNum: A00000000
+date: Feb 30th, 2020
+assignmentName: Assignment 1
+courseNum: COMP 1234
+projectName: ExampleProject
+language: # supported: c, c++, go, python, java, javascript
+githubPath: # Optional: github.com/username/projectName -- primarily for Go
+purpose: Show how to use this assignment-starter
+license: MIT
+
+files:
+  - name: geometry
+    types: # Define types used in your project (eg. struct, class)
+    - name: EXAMPLE_TYPE
+      dataType: struct # Struct/Type/Class/Interface
+      access: # Access modifier (public/private/protected) if needed
+      description: This is an example of a type
+      fields: # Define the fields inside the type
+        - name: username
+          type: string
+          access: public
+        - name: password
+          type: string
+          access: public
+    functions: # Define the functions in your project
+      - name: exampleFunction
+        parameters: # List the parameters that the function takes
+          - name: param1
+            type: int
+          - name: param2
+            type: double
+        returnType: void
+        access: # Access modifier (public/private/protected) if needed
+        description: |
+          # This function demonstrates an example of how to write function documentation
+          # It accepts two parameters: an integer and a double, and returns nothing.
+        pseudocode: |
+          # 1. Accept two parameters: param1 and param2.
+          # 2. Perform a task or computation using the parameters.
+          # 3. Return nothing (void function).
+  - name: utils
+    types:
+      - name: Config
+        dataType: struct
+        access: public
+        description: config data type
+        fields:
+          - name: name
+            type: char*
+            access: public
+          - name: value
+            type: int
+            access: public
+    functions:
+      - name: parse_args
+        parameters:
+          - name: argc
+            type: int
+          - name: argv
+            type: char**
+        returnType: int
+        access: public
+        description: Parse command line arguments
+        pseudocode: |
+          Check number of arguments
+          Process each argument
+          Return success or error code
+  - name: message
+    functions:
+      - name: display_message
+        parameters:
+          - name: msg
+            type: char*
+        returnType: void
+        access: public
+        comment: Display a message to the user
+        pseudocode: |
+          Print message to stdout
+
+states: # Define the states in your program
+  - name: EXAMPLE_STATE
+    description: "This is an example of a state"
+    transitions: # List the possible transitions from this state
+      - to: "HOME_STATE"
+        function: goHomeState()
+      - to: "ERROR_STATE"
+        function: handleError()
+  - name: START
+    description: Entry point of the program
+    transitions:
+      - to: PARSE_ARGS
+        function: parse_args
+  - name: PARSE_ARGS
+    description: Parse command line arguments
+    transitions:
+      - to: HANDLE_ARGS
+        function: handle_args
+      - to: USAGE
+        function: usage
+  - name: HANDLE_ARGS
+    description: Process command line arguments
+    transitions:
+      - to: DISPLAY_MESSAGE
+        function: display_message
+      - to: USAGE
+        function: usage
+  - name: DISPLAY_MESSAGE
+    description: Show message to user
+    transitions:
+      - to: CLEANUP
+        function: cleanup
+  - name: CLEANUP
+    description: Clean up resources
+    transitions:
+      - to: EXIT
+        function: exit
+  - name: USAGE
+    description: Display usage information
+    transitions:
+      - to: EXIT
+        function: exit
+  - name: EXIT
+    description: Exit the program
+
+report:
+  requirements: #requirements section of report doc.
+    - req: "Describe requirement"
+      status: "Not fully Implemented"
+          
+  platforms: #What platforms does the assignment work on
+    - linux
+    - macos
+    - freebsd
+    
+  language: #What languages does the assignment work on
+    - ISO C17
+
+  findings: |
+    List findings here
+
+userGuide:
+  installing:
+    - obtaining: | 
+        fill in with how to clone
+
+      building: |
+        fill in with how to build
+
+      running: |
+        fill in with how to run
+
+  env: # List any environment variables here
+    - variable: variable
+      purpose: |
+        The purpose of this variable is to variable
+
+  configuration: # List any configurations here
+    - variable: variable
+      purpose: |
+        The purpose of this variable is to variable
+
+testing:
+  testcases: #test cases for testing doc.
+    - testname: Send empty command
+      expectedres: pass
