@@ -15,23 +15,24 @@ types: # Define types used in your project (eg. struct, class)
       - name: password
         type: string
 
-files:
-  functions: # Define the functions in your project
-    - name: exampleFunction
-      parameters: # List the parameters that the function takes
-        - name: param1
-          type: int
-        - name: param2
-          type: double
-      returnType: void
-      access: # Access modifier (public/private/protected) if needed
-      comment: |
-        # This function demonstrates an example of how to write function documentation
-        # It accepts two parameters: an integer and a double, and returns nothing.
-      pseudocode: |
-        # 1. Accept two parameters: param1 and param2.
-        # 2. Perform a task or computation using the parameters.
-        # 3. Return nothing (void function).
+files: ##MAYBE ADD FILE NAMES / HOW ARE HEADER FILES DECLARED. IS FILES.TXT UPDATED?
+  - name: geometry
+    functions: # Define the functions in your project
+      - name: exampleFunction
+        parameters: # List the parameters that the function takes
+          - name: param1
+            type: int
+          - name: param2
+            type: double
+        returnType: void
+        access: # Access modifier (public/private/protected) if needed
+        comment: |
+          # This function demonstrates an example of how to write function documentation
+          # It accepts two parameters: an integer and a double, and returns nothing.
+        pseudocode: |
+          # 1. Accept two parameters: param1 and param2.
+          # 2. Perform a task or computation using the parameters.
+          # 3. Return nothing (void function).
 
 states: # Define the states in your program
   - name: EXAMPLE_STATE
@@ -43,7 +44,124 @@ states: # Define the states in your program
         function: handleError()
 
 #File Information
-  #Unfinished
+
+#Design Document
+
+titlepage: #Please Enter The Following Information for the title page
+  name: Pat Doe
+  stdnum: A00000000
+  date: Feb 30th, 2020
+  assignmentname: Assignment 1
+  coursenum: COMP 1234
+
+body: 
+  - purpose: "Describe the purpose of the assignment"
+
+    datatypes: #Data Types section of design doc.
+      - arguments: 
+          - field: argc
+            type: integer
+            description: "The number of arguments"
+        settings:
+          - field: count
+            type: unsigned integer
+            description: "The number of times to display the message"
+        context:
+          - field: arguments
+            type: arguments
+            description: "The command line arguments"
+
+    ##REDUNDANT: CAN BE BE FOUND IN CODE INFO SECTION      
+    # pseudocode: #Pseudocode section
+    #   - functionname: parse_arguments
+    #     parameters:
+    #       - parameter: ctx
+    #         type: Context
+    #         description: "The program context"
+    #     return:
+    #       - value: DISPLAY_MESSAGE
+    #         reason: "The args are correct"
+    #     pseudocode: | #Write Pseudocode for the function here
+    #       call getopt in a loop
+    #         if opt is ‘h’ 
+    #           call usage
+    #         if opt is ‘c’ 
+    #           set ctx.arguments.count to ctx.argument.argv[optind]
+    #         If opt is ‘?’ 
+    #           call usage
+
+    #       If there are more than 1 unnamed argument 
+    #         return USAGE
+
+    #       ctx.arguments.message = ctx.arguments.argv[optind]
+
+    #       return HANDLE_ARGS
+
+    #Functions, States And State Table filled 
+    #in using the code information above
+
+#Report Document
+
+#Title page information Reused
+
+body: 
+
+    #Purpose Reused from design doc
+
+    requirements: #requirements section of report doc.
+      - req: "Describe requirement"
+        status: "Not fully Implemented"
+          
+    platforms: #What platforms does the assignment work on
+      - linux
+      - macos
+      - freebsd
+    
+    language: #What languages does the assignment work on
+      - ISO C17
+
+    #figure out how to link documents
+
+    findings: |
+      List findings here
+
+#User Guide Document
+
+#Title page information Reused
+
+body: 
+    
+    #Purpose Reused from design doc
+
+    installing: #Data Types section of design doc.
+      - obtaining: | 
+          fill in with how to clone
+
+        building: |
+          fill in with how to build
+
+        running: |
+          fill in with how to run
+
+    environmentvars: # List any environment variables here
+      - variable: variable
+        purpose: |
+          The purpose of this variable is to variable
+
+    configuration: # List any configurations here
+      - variable: variable
+        purpose: |
+          The purpose of this variable is to variable
+
+#Testing Document
+
+#Title page information Reused
+
+body: 
+    - testcases: #test cases for testing doc.
+      - testname: Send empty command
+        expectedres: pass
+        
 
 author: MELKE BBY-17
 license: BCIT
