@@ -36,8 +36,8 @@ class PythonGenerator extends BaseGenerator {
         content += '"""\n';
         content += `${fileConfig.name} module for ${packageName}\n\n`;
 
-        if (fileConfig.comment) {
-            content += `${fileConfig.comment}\n`;
+        if (fileConfig.description) {
+            content += `${fileConfig.description}\n`;
         }
 
         content += '"""\n\n';
@@ -321,8 +321,8 @@ class PythonGenerator extends BaseGenerator {
 
         // Docstring
         content += '    """\n';
-        if (func.comment) {
-            content += `    ${func.comment}\n\n`;
+        if (func.description) {
+            content += `    ${func.description}\n\n`;
         } else {
             content += `    ${funcName} function\n\n`;
         }

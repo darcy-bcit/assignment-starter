@@ -219,8 +219,8 @@ class GoGenerator extends BaseGenerator {
         const funcName = this.toPascalCase(func.name); // Public functions use PascalCase
 
         // Add comment
-        if (func.comment) {
-            content += `// ${funcName} ${func.comment}\n`;
+        if (func.description) {
+            content += `// ${funcName} ${func.description}\n`;
         }
 
         // Function signature

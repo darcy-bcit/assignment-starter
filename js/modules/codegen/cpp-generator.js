@@ -311,8 +311,8 @@ install(TARGETS \${PROJECT_NAME} DESTINATION bin)
 
         // Function documentation
         content += '/**\n';
-        if (func.comment) {
-            content += ` * @brief ${func.comment}\n`;
+        if (func.description) {
+            content += ` * @brief ${func.description}\n`;
         } else {
             content += ` * @brief ${func.name} function\n`;
         }
@@ -363,8 +363,8 @@ install(TARGETS \${PROJECT_NAME} DESTINATION bin)
 
         // Function documentation
         content += '/**\n';
-        if (func.comment) {
-            content += ` * @brief ${func.comment}\n`;
+        if (func.description) {
+            content += ` * @brief ${func.description}\n`;
         } else {
             content += ` * @brief ${func.name} function implementation\n`;
         }

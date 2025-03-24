@@ -171,9 +171,9 @@ class CGenerator extends BaseGenerator {
             access = '';
         }
 
-        // add the description comment
-        if (func.comment) {
-            content += `/**\n * ${func.comment}\n */\n`;
+        // add the description
+        if (func.description) {
+            content += `/**\n * ${func.description}\n */\n`;
         }
 
         content += `${access}${returnType} ${func.name}(`;

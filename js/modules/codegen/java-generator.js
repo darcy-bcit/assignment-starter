@@ -121,8 +121,8 @@ class JavaGenerator extends BaseGenerator {
         let content = '';
 
         // description
-        if (func.comment) {
-            content += `    /**\n     * ${func.comment}\n     */\n`;
+        if (func.description) {
+            content += `    /**\n     * ${func.description}\n     */\n`;
         }
 
         const accessModifier = func.access === 'public' ? 'public' :

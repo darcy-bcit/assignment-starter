@@ -302,8 +302,8 @@ class JavaScriptGenerator extends BaseGenerator {
 
         // Add function documentation
         content += '/**\n';
-        if (func.comment) {
-            content += ` * ${func.comment}\n`;
+        if (func.description) {
+            content += ` * ${func.description}\n`;
         } else {
             content += ` * ${funcName} function\n`;
         }
