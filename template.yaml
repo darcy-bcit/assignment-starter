@@ -13,8 +13,8 @@ files: # List
   - name:
     types: # List
       - name:
-        dataType:
-        access:
+        dataType: # Struct/Class/Type/Interface
+        access: # Access modifier (public/private/protected) if needed
         description:
         fields: # List
           - name:
@@ -33,7 +33,7 @@ files: # List
 states: # List
   - name:
     description:
-    transitions: # List
+    transitions: # List -- possible transitions from this state
       - to:
         function:
 
@@ -41,15 +41,15 @@ report:
   requirements: # List
     - req:
       status:
-  platforms:
-  language:
+  platforms: # List -- platforms this program compiles and runs on
+  language: # specific version
   findings:
 
 userGuide:
   installing: # List
-    - obtaining:
-      building:
-      running:
+    obtaining:
+    building:
+    running:
   env: # List
     - variable:
       purpose:
@@ -57,4 +57,4 @@ userGuide:
 testing:
   testcases: # List
     - name:
-      expected:
+      expected: # pass or fail

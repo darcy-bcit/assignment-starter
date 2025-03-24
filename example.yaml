@@ -7,8 +7,8 @@ date: Feb 30th, 2020
 assignmentName: Assignment 1
 courseNum: COMP 1234
 projectName: ExampleProject
-language: # supported: c, c++, go, python, java, javascript
-githubPath: # Optional: github.com/username/projectName -- primarily for Go
+language: c # supported: c, c++, go, python, java, javascript
+githubPath: github.com/pat-doe/ExampleProject # -- primarily for Go
 purpose: Show how to use this assignment-starter
 license: MIT
 
@@ -82,13 +82,6 @@ files:
           Print message to stdout
 
 states: # Define the states in your program
-  - name: EXAMPLE_STATE
-    description: "This is an example of a state"
-    transitions: # List the possible transitions from this state
-      - to: "HOME_STATE"
-        function: goHomeState()
-      - to: "ERROR_STATE"
-        function: handleError()
   - name: START
     description: Entry point of the program
     transitions:
@@ -128,30 +121,29 @@ states: # Define the states in your program
 
 report:
   requirements: #requirements section of report doc.
-    - req: "Describe requirement"
-      status: "Not fully Implemented"
+    - req: Describe requirement
+      status: Not fully Implemented
           
   platforms: #What platforms does the assignment work on
     - linux
     - macos
     - freebsd
     
-  language: #What languages does the assignment work on
-    - ISO C17
+  language: ISO C17
 
   findings: |
     List findings here
 
 userGuide:
   installing:
-    - obtaining: | 
-        fill in with how to clone
+    obtaining: | 
+      fill in with how to clone
 
-      building: |
-        fill in with how to build
+    building: |
+      fill in with how to build
 
-      running: |
-        fill in with how to run
+    running: |
+      fill in with how to run
 
   env: # List any environment variables here
     - variable: variable
@@ -165,5 +157,5 @@ userGuide:
 
 testing:
   testcases: #test cases for testing doc.
-    - testname: Send empty command
-      expectedres: pass
+    - name: Send empty command
+      expected: pass
