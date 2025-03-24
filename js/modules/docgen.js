@@ -14,8 +14,267 @@ async function generateUserGuide(projectDir) {
 
 async function generateTesting(config, projectDir) {
     const docPath = path.join(projectDir, report, "testing.docx");
+
+
+    const TestTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 5000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Test",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 1500,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Expected",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 1500,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Actual",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Screenshot",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 5000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "No arguments",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 1500,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "fail",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 1500,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "fail",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Test 1",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
     const doc = new Document({
-        // write doc contents here
+        title: "Testing",
+        styles: {
+            paragraphStyles: [
+                {
+                    id: "Heading1",
+                    name: "Heading 1",
+                    basedOn: "Normal",
+                    next: "Normal",
+                    quickFormat: true,
+                    run: {
+                        size: 40,
+                        color: "000000",
+                        font: "Arial"
+                    }
+                }
+            ]
+        },
+    
+        sections: [ 
+            {
+                children: [
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [
+                            new TextRun({
+                                text: "COMP 1234",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Assignment 1\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Testing\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            })
+                        ]
+                    }),
+    
+                    new Paragraph({
+                        alignment: AlignmentType.LEFT,
+                        children: [
+                            new TextRun({
+                                text: "FULL NAME",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "STUDENT NUMBER",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "DATE",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new PageBreak()
+                        ]
+                    }),
+    
+                    new TableOfContents("TestingContents", {
+                        hyperlink: true,
+                        headingStyleRange: "1-5",
+                        font: "Arial"
+                    }),
+                    TestTable,
+
+                    new Paragraph({
+                        text: "Tests",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+
+                    new Paragraph({
+                        text: "Test 1",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    
+                ],
+            },
+        ],
     });
 
     const buffer = await docx.Packer.toBuffer(doc);
@@ -24,8 +283,1077 @@ async function generateTesting(config, projectDir) {
 
 async function generateDesign(config, projectDir) {
     const docPath = path.join(projectDir, report, "design.docx");
+
+    const ArgTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Field",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Type",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    })
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "argc",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "integer",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The number of arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const SettingTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Field",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Type",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    })
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "count",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "unsigned integer",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The number of times to display the message",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const ConTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Field",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Type",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    })
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "Arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The command line arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const FunTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Function",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "parse_arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "Parse the command line arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const StateTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "State",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "PARSE_ARGS",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "Parse command line arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const StateTabTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "From State",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "To State",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Function",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "START",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "PARSE_ARGS",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "parse_arguments",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const ParamTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Parameters",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Type",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 5000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Description",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "ctx",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 2000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "Context",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 5000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The program context",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const ReturnTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Value",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Reason",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 3000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "HANDLE_ARGS",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 6000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The args passed are all known",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
     const doc = new Document({
-        // write doc contents here
+        title: "Design",
+        styles: {
+            paragraphStyles: [
+                {
+                    id: "Heading1",
+                    name: "Heading 1",
+                    basedOn: "Normal",
+                    next: "Normal",
+                    quickFormat: true,
+                    run: {
+                        size: 40,
+                        color: "000000",
+                        font: "Arial"
+                    }
+                }
+            ]
+        },
+    
+        sections: [ 
+            {
+                children: [
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [
+                            new TextRun({
+                                text: "COMP 1234",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Assignment 1\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Design\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            })
+                        ]
+                    }),
+    
+                    new Paragraph({
+                        alignment: AlignmentType.LEFT,
+                        children: [
+                            new TextRun({
+                                text: "FULL NAME",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "STUDENT NUMBER",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "DATE",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new PageBreak()
+                        ]
+                    }),
+    
+                    new TableOfContents("DesignContents", {
+                        hyperlink: true,
+                        headingStyleRange: "1-5",
+                        font: "Arial"
+                    }),
+    
+                    new Paragraph({
+                        text: "Purpose",
+                        heading: HeadingLevel.HEADING_1,
+                        pageBreakBefore: true,
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "This program demonstrates how to write a program for the course.",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }),
+                    new Paragraph({
+                        text: "Data Types",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+
+                    new Paragraph({
+                        text: "Arguments",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Purpose: To hold the unparsed command-line argument information",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }),
+                    ArgTable,
+
+                    new Paragraph({
+                        text: "Settings",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Purpose: To hold the settings the program needs to run.",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }),
+                    SettingTable,
+
+                    new Paragraph({
+                        text: "Context",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "Purpose: To hold the arguments, settings, and exit information",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }),
+                    ConTable,
+
+                    new Paragraph({
+                        text: "Functions",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+                    FunTable,
+                    
+                    new Paragraph({
+                        text: "States",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+                    StateTable,
+
+                    new Paragraph({
+                        text: "State Table",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+                    StateTabTable,
+                    
+                    new Paragraph({
+                        text: "State Transition Diagram",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+                    
+                    new Paragraph({
+                        text: "Pseudocode",
+                        heading: HeadingLevel.HEADING_1,
+                    }),
+                    new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: "(Pseudocode is a language/platform-independent way to communicate what functions are supposed to do).",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }),
+                    new Paragraph({
+                        text: "parse_arguments",
+                        heading: HeadingLevel.HEADING_2,
+                    }),
+                    new Paragraph({
+                        text: "Parameters",
+                        heading: HeadingLevel.HEADING_3,
+                    }),
+                    ParamTable,
+
+                    new Paragraph({
+                        text: "Return",
+                        heading: HeadingLevel.HEADING_3,
+                    }),
+                    ReturnTable,
+                ],
+            },
+        ],
     });
 
     const buffer = await docx.Packer.toBuffer(doc);
