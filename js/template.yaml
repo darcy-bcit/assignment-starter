@@ -1,9 +1,9 @@
 language:
 projectName:
+githubPath: # Optional: github.com/username/projectname -- primarily for Go
 
 files:
   - name:
-    dependencies:
     types:
       - name:
         dataType:

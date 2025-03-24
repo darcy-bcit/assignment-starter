@@ -4,7 +4,8 @@ const cli = require('./modules/cli');
 const configParser = require('./modules/config-parser');
 const dirUtils = require('./modules/directory-utils');
 const codegen = require('./modules/codegen');
-const docgen = require('./modules/docgen')
+const docgen = require('./modules/docgen');
+const stateDiagram = require('./modules/state-diagram');
 
 async function main() {
     try {
@@ -23,7 +24,6 @@ async function main() {
         // prepare dirs
         const outputDir = args.output || process.cwd();
         const projectDir = `${outputDir}/${config.projectName}`;
-
         await dirUtils.prepareProjectDirectory(projectDir);
 
         // gen code
@@ -35,8 +35,10 @@ async function main() {
 
         // gen docs
         if (args.generate === 'docs' || args.generate === 'all') {
-            // TODO evin-gg: docx stuff here
-            await docgen.generateDocs();
+            // create diagram before docs
+            await stateDiagram.generateStateDiagram(config, projectDir);
+
+            await docgen.generateDocs(config, projectDir);
             console.log(`Documentation generation completed`);
         }
 

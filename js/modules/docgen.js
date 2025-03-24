@@ -1,19 +1,265 @@
 const fs = require('fs');
 const docx = require('docx');
 const path = require("path");
+const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak, Table, TableOfContents, TableRow, TableCell, WidthType, ExternalHyperlink } = require("docx");
 
 async function generateUserGuide(projectDir) {
-    const docPath = path.join(projectDir, report, "user-guide.docx");
+    const docPath = path.join(projectDir, "report", "user-guide.docx");
     const doc = new Document({
-        // write doc contents here
-    });
+        title: "User-Guide",
+        styles: {
+            paragraphStyles: [
+                {
+                    id: "Heading1",
+                    name: "Heading 1",
+                    basedOn: "Normal",
+                    next: "Normal",
+                    quickFormat: true,
+                    run: {
+                        size: 40,
+                        color: "000000",
+                        font: "Arial"
+                    }
+                },
+    
+                {
+                    id: "Heading2",
+                    name: "Heading 2",
+                    basedOn: "Normal",
+                    next: "Normal",
+                    quickFormat: true,
+                    run: {
+                        size: 32,
+                        color: "000000",
+                        font: "Arial"
+                    }
+                }
+            ]
+        },
+        sections: [
+            {
+                children: [
+                    new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [
+                            new TextRun({
+                                text: "COMP 1234",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Assignment 1\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            }),
+                            new TextRun({break: 1}),
+                            new TextRun({
+                                text: "Report\n",
+                                size: "52",
+                                color: "000000",
+                                font: "Arial"
+                            })
+                        ]
+                    }),
+    
+                    new Paragraph({
+                        alignment: AlignmentType.LEFT,
+                        children: [
+                            new TextRun({
+                                text: "FULL NAME",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "STUDENT NUMBER",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new TextRun({
+                                text: "DATE",
+                                font: "Arial",
+                                size: "22",
+                                break: true
+                            }),
+                            new PageBreak(),
+                            new TableOfContents("ReportContents", {
+                                hyperlink: true,
+                                headingStyleRange: "1-5",
+                                font: "Arial"
+                            }),
+            
+                            new Paragraph({
+                                text: "Purpose",
+                                heading: HeadingLevel.HEADING_1,
+                                pageBreakBefore: true,
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "This program demonstrates how to write a program for the course.",
+                                        size: 24,
+                                        font: "Arial",
+                                        break: true
+                                    })
+                                ]
+                            }),
+                            new Paragraph({
+                                text: "Installing",
+                                heading: HeadingLevel.HEADING_1,
+                            }),
+                            new Paragraph({
+                                text: "Obtaining",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "git clone ",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                    new ExternalHyperlink({
+                                        children: [
+                                            new TextRun({
+                                                text: "https://github.com/",
+                                                font: "Courier New",
+                                                size: 22,
+                                                style: "Hyperlink",
+                                            }),
+                                        ],
+                                        
+                                        link: "https://github.com/"
+                                    }),
+                                ]
+                            }),
+                            new Paragraph({
+                                text: "Building",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "cd",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "./generate-cmakelists.sh",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "./change-compiler.sh -c <compiler>",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "./build.sh",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+                            new Paragraph({
+                                text: "Running",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+                            
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "./build/main",
+                                        font: "Courier New",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+                            
+                            new Paragraph({
+                                text: "Environment Variables",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+    
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The following environment variables alter the behaviour of main:",
+                                        font: "Arial",
+                                        size: 22
+                                    }),
+                                ]
+                            }),
+    
+                            Table1,
+                            
+                            new Paragraph({
+                                text: "Configuration",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+    
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The following configuration values can be set in <file>:",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            }),
+    
+                            Table1,
+                            
+                            new Paragraph({
+                                text: "Command Lines Arguments",
+                                heading: HeadingLevel.HEADING_2,
+                            }),
+    
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The following configuration values can be set in <file>:",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            }),
+    
+                            Table2,
+                            
+                            new Paragraph({
+                                text: "Examples",
+                                heading: HeadingLevel.HEADING_1,
+                            }),
+                        ]
+                    }),
+                ]
+            }
+        ],
+    })
 
     const buffer = await docx.Packer.toBuffer(doc);
     fs.writeFileSync(docPath, buffer);
 }
 
 async function generateTesting(config, projectDir) {
-    const docPath = path.join(projectDir, report, "testing.docx");
+    const docPath = path.join(projectDir, "report", "testing.docx");
 
 
     const TestTable = new Table({
@@ -282,7 +528,7 @@ async function generateTesting(config, projectDir) {
 }
 
 async function generateDesign(config, projectDir) {
-    const docPath = path.join(projectDir, report, "design.docx");
+    const docPath = path.join(projectDir, "report", "design.docx");
 
     const ArgTable = new Table({
         rows: [
@@ -1361,7 +1607,7 @@ async function generateDesign(config, projectDir) {
 }
 
 async function generateReport(projectDir) {
-    const docPath = path.join(projectDir, report, "report.docx");
+    const docPath = path.join(projectDir, "report", "report.docx");
     const RequirementsTable = new Table({
         rows: [
             new TableRow({
@@ -1752,10 +1998,10 @@ async function generateReport(projectDir) {
 }
 
 async function generateDocs(config, projectDir) {
-    await generateReport();
-    await generateTesting();
-    await generateDesign();
-    await generateUserGuide();
+    await generateReport(projectDir);
+    // await generateTesting(config, projectDir);
+    // await generateDesign(config, projectDir);
+    await generateUserGuide(projectDir);
 }
 
-module.exports = generateDocs;
+module.exports = {generateDocs};

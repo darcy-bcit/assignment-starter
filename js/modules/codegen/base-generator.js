@@ -27,7 +27,7 @@ class BaseGenerator {
     }
 
     async generateMainFile(config, projectDir) {
-        throw new Error("Method 'generateFile' must be implemented");
+        throw new Error("Method 'generateMainFile' must be implemented");
     }
 
     async writeFile(filePath, content) {
