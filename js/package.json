@@ -1,0 +1,23 @@
+{
+  "name": "assignment-starter",
+  "version": "1.0.0",
+  "description": "A CLI tool to generate project code and documentation",
+  "keywords": [
+    "cli",
+    "generator",
+    "code",
+    "docx"
+  ],
+  "license": "ISC",
+  "author": "MELKE",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "docx": "^9.2.0",
+    "js-yaml": "^4.1.0",
+    "yargs": "^17.7.2"
+  }
+}
