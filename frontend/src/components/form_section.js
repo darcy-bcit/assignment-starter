@@ -101,15 +101,6 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
       );
   };    
 
-  //This helper function is purely for front end layout purposes. It will chunk the array into smaller arrays so the layour remains consistent.
-  const chunkArray = (array, chunkSize) => {
-    const chunks = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunks.push(array.slice(i, i + chunkSize));
-    }
-    return chunks;
-  };
-
   return (
     <div className="my-4 border-bottom-ch ">
       <h2 className="black font-size-20">{name}</h2>
@@ -117,8 +108,9 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
         <div className="form-group">
           {fields.map((ele, index) =>
             ele.type === 'multiple' ? (
-              <div key={index} className="d-flex flex-row align-items-start w-100">
-                <div className="col d-flex flex-row flex-wrap align-items-start w-100">
+              <div key={index} className="d-flex flex-row align-items-start w-100 flex-wrap">
+                {/* <div className="col d-flex flex-row flex-wrap align-items-start w-100"> */}
+                <div className="col-auto d-flex justify-content-start flex-column mx-1 my-3" style={{ flex: "0 0 50%" }}>
                   {ele.children.map((child, childIndex) =>
                     child.type === 'multiple' ? (
                       <div key={childIndex} className="d-flex flex-row w-100 align-items-start">

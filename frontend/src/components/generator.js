@@ -27,6 +27,26 @@ const Generator = () => {
     //       type: arguments
     //       description: "The command line arguments"
 
+    const [yamlContent, setYamlContent] = useState("");
+    const [yamlFileName, setYamlFileName] = useState("");
+
+    // Function to trigger YAML file download
+    const downloadYAML = () => {
+      if (!yamlContent) return;
+
+      const blob = new Blob([yamlContent], { type: "text/yaml" });
+      const url = URL.createObjectURL(blob);
+      const safeFileName = yamlFileName.trim() || "generated"; // Default to 'generated' if empty
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${safeFileName}.yaml`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+  };
+
     const [settings, setSettings] = useState([
         { name: 'Field', type: 'text', value: '' },
         { name: 'Type', type: 'text', value: '' },
@@ -772,6 +792,8 @@ const Generator = () => {
         const yamlData3 = yaml.dump(formattedData3);
         const yamlData4 = yaml.dump(formattedData4);
 
+        setYamlContent(yamlData); // ✅ Store YAML for download
+
         console.log(yamlData + "\n" + yamlData2 + "\n" + yamlData3 + "\n" + yamlData4);
         alert("YAML generated successfully. Check the console for the output.");
     };
@@ -819,6 +841,22 @@ const Generator = () => {
                 </div>
                 {/* </div>
                 </div> */}
+                
+                {/* ✅ Show Download button only if YAML is generated */}
+                {yamlContent && (
+                    <div className="my-2">
+                        <input 
+                            type="text" 
+                            className="form-control mb-2"
+                            placeholder="Enter file name (without .yaml)" 
+                            value={yamlFileName} 
+                            onChange={(e) => setYamlFileName(e.target.value)}
+                        />
+                        <button onClick={downloadYAML} className="btn btn-success w-100 bold">
+                            Download YAML
+                        </button>
+                    </div>
+                )}
             </div>
         </>
     );
