@@ -221,6 +221,21 @@ async function generateUserGuide(projectDir) {
         title: "User-Guide",
         styles: {
             paragraphStyles: [
+
+                {
+                    id: "Normal",
+                    name: "Normal",
+                    basedOn: "Normal",
+                    quickFormat: true,
+                    paragraph: {
+                        spacing: {
+                            // line: 
+                            before: 100, 
+                            after: 100
+                        },
+                    },
+                },
+
                 {
                     id: "Heading1",
                     name: "Heading 1",
@@ -231,7 +246,15 @@ async function generateUserGuide(projectDir) {
                         size: 40,
                         color: "000000",
                         font: "Arial"
-                    }
+                    },
+
+                    paragraph: {
+                        spacing: {
+                            // line: 
+                            before: 300, 
+                            // after: 
+                        },
+                    },
                 },
     
                 {
@@ -244,7 +267,14 @@ async function generateUserGuide(projectDir) {
                         size: 32,
                         color: "000000",
                         font: "Arial"
-                    }
+                    },
+                    paragraph: {
+                        spacing: {
+                            // line: 276,  // 1.5 line spacing (240 per single line)
+                            before: 300, // Space before paragraph
+                            // after: 200,  // Space after paragraph
+                        },
+                    },
                 }
             ]
         },
@@ -316,7 +346,6 @@ async function generateUserGuide(projectDir) {
                                         text: "This program demonstrates how to write a program for the course.",
                                         size: 24,
                                         font: "Arial",
-                                        break: true
                                     })
                                 ]
                             }),
@@ -1960,8 +1989,31 @@ async function generateReport(projectDir) {
                         size: 40,
                         color: "000000",
                         font: "Arial"
-                    }
-                }
+                    },
+
+                    paragraph: {
+                        spacing: {
+                            // line: 
+                            before: 300, 
+                            // after: 
+                        },
+                    },
+                },
+
+                {
+                    id: "Normal",
+                    name: "Normal",
+                    basedOn: "Normal",
+                    quickFormat: true,
+                    paragraph: {
+                        spacing: {
+                            // line: 
+                            before: 100, 
+                            after: 100
+                        },
+                    },
+                },
+                
             ]
         },
     
