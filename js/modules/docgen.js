@@ -5,7 +5,219 @@ const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak, Ta
 
 async function generateUserGuide(projectDir) {
     const docPath = path.join(projectDir, "report", "user-guide.docx");
-    const doc = new Document({
+
+    const Table1 = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Variable",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Purpose",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const Table2 = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Variable",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Purpose",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "-c",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The number of times to print the message",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "<message>",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: "The message to print",
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const userguide = new Document({
         title: "User-Guide",
         styles: {
             paragraphStyles: [
@@ -57,7 +269,7 @@ async function generateUserGuide(projectDir) {
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: "Report\n",
+                                text: "User-Guide\n",
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
@@ -254,7 +466,7 @@ async function generateUserGuide(projectDir) {
         ],
     })
 
-    const buffer = await docx.Packer.toBuffer(doc);
+    const buffer = await docx.Packer.toBuffer(userguide);
     fs.writeFileSync(docPath, buffer);
 }
 
@@ -428,7 +640,7 @@ async function generateTesting(config, projectDir) {
         ],
     });
 
-    const doc = new Document({
+    const testing = new Document({
         title: "Testing",
         styles: {
             paragraphStyles: [
@@ -523,7 +735,7 @@ async function generateTesting(config, projectDir) {
         ],
     });
 
-    const buffer = await docx.Packer.toBuffer(doc);
+    const buffer = await docx.Packer.toBuffer(testing);
     fs.writeFileSync(docPath, buffer);
 }
 
@@ -1398,7 +1610,7 @@ async function generateDesign(config, projectDir) {
         ],
     });
 
-    const doc = new Document({
+    const design = new Document({
         title: "Design",
         styles: {
             paragraphStyles: [
@@ -1602,7 +1814,7 @@ async function generateDesign(config, projectDir) {
         ],
     });
 
-    const buffer = await docx.Packer.toBuffer(doc);
+    const buffer = await docx.Packer.toBuffer(design);
     fs.writeFileSync(docPath, buffer);
 }
 
@@ -1734,7 +1946,7 @@ async function generateReport(projectDir) {
     });
     
     // Document creation starts here
-    const doc = new Document({
+    const report = new Document({
         title: "Report",
         styles: {
             paragraphStyles: [
@@ -1993,14 +2205,14 @@ async function generateReport(projectDir) {
         ],
     });
 
-    const buffer = await docx.Packer.toBuffer(doc);
+    const buffer = await docx.Packer.toBuffer(report);
     fs.writeFileSync(docPath, buffer);
 }
 
 async function generateDocs(config, projectDir) {
     await generateReport(projectDir);
-    // await generateTesting(config, projectDir);
-    // await generateDesign(config, projectDir);
+    await generateTesting(config, projectDir);
+    await generateDesign(config, projectDir);
     await generateUserGuide(projectDir);
 }
 
