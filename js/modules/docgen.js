@@ -2012,7 +2012,7 @@ async function generateReport(config, projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "Display the message count times",
+                                        text: config.report.requirements.req,
                                         font: "Arial",
                                         size: 22
                                     })
@@ -2029,7 +2029,7 @@ async function generateReport(config, projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "Fully Implemented",
+                                        text: config.report.requirements.status,
                                         font: "Arial",
                                         size: 22
                                     })
@@ -2041,43 +2041,43 @@ async function generateReport(config, projectDir) {
             }),
     
     
-            new TableRow({
-                children: [
-                    new TableCell({
-                        width: {
-                            size: 6000,
-                            type: WidthType.DXA,
-                        },
-                        children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "(bonus) (if there were a bonus, it would be listed here)",
-                                        font: "Arial",
-                                        size: 22
-                                    })
-                                ]
-                            })
-                        ],
-                    }),
-                    new TableCell({
-                        width: {
-                            size: 2000,
-                            type: WidthType.DXA,
-                        },
-                        children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "Not Implemented",
-                                        font: "Arial",
-                                        size: 22
-                                    })
-                                ]
-                        })],
-                    }),
-                ],
-            }),
+            // new TableRow({
+            //     children: [
+            //         new TableCell({
+            //             width: {
+            //                 size: 6000,
+            //                 type: WidthType.DXA,
+            //             },
+            //             children: [
+            //                 new Paragraph({
+            //                     children: [
+            //                         new TextRun({
+            //                             text: "(bonus) (if there were a bonus, it would be listed here)",
+            //                             font: "Arial",
+            //                             size: 22
+            //                         })
+            //                     ]
+            //                 })
+            //             ],
+            //         }),
+            //         new TableCell({
+            //             width: {
+            //                 size: 2000,
+            //                 type: WidthType.DXA,
+            //             },
+            //             children: [
+            //                 new Paragraph({
+            //                     children: [
+            //                         new TextRun({
+            //                             text: "Not Implemented",
+            //                             font: "Arial",
+            //                             size: 22
+            //                         })
+            //                     ]
+            //             })],
+            //         }),
+            //     ],
+            // }),
         ],
     });
     
@@ -2131,21 +2131,21 @@ async function generateReport(config, projectDir) {
                         alignment: AlignmentType.CENTER,
                         children: [
                             new TextRun({
-                                text: "COMP 1234",
+                                text: config.courseNum,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: "Assignment 1\n",
+                                text: config.assignmentName,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: "Report\n",
+                                text: config.projectName,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
@@ -2157,19 +2157,19 @@ async function generateReport(config, projectDir) {
                         alignment: AlignmentType.LEFT,
                         children: [
                             new TextRun({
-                                text: "FULL NAME",
+                                text: config.author,
                                 font: "Arial",
                                 size: "22",
                                 break: true
                             }),
                             new TextRun({
-                                text: "STUDENT NUMBER",
+                                text: config.studentNum,
                                 font: "Arial",
                                 size: "22",
                                 break: true
                             }),
                             new TextRun({
-                                text: "DATE",
+                                text: config.date,
                                 font: "Arial",
                                 size: "22",
                                 break: true
@@ -2192,7 +2192,7 @@ async function generateReport(config, projectDir) {
                     new Paragraph({
                         children: [
                             new TextRun({
-                                text: "This program demonstrates how to write a program for the course.",
+                                text: config.purpose,
                                 size: 24,
                                 font: "Arial",
                                 break: true
@@ -2219,11 +2219,62 @@ async function generateReport(config, projectDir) {
                         ]
                     }),
     
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "macOS 14.2",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "Manjaro",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "Ubuntu 2023.10",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "Fedora 39",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "FreeBSD 14.0",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+
                     new Paragraph({
                         bullet: {level: 0},
                         children: [
                             new TextRun({
-                                text: "macOS 14.2",
+                                text: config.report.platforms[0],
                                 font: "Arial",
                                 size: 22
                             }),
@@ -2233,7 +2284,7 @@ async function generateReport(config, projectDir) {
                         bullet: {level: 0},
                         children: [
                             new TextRun({
-                                text: "Manjaro",
+                                text: config.report.platforms[1],
                                 font: "Arial",
                                 size: 22
                             }),
@@ -2243,32 +2294,14 @@ async function generateReport(config, projectDir) {
                         bullet: {level: 0},
                         children: [
                             new TextRun({
-                                text: "Ubuntu 2023.10",
+                                text: config.report.platforms[2],
                                 font: "Arial",
                                 size: 22
                             }),
                         ]
                     }),
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: "Fedora 39",
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: "FreeBSD 14.0",
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
+
+
     
                     new Paragraph({
                         text: "Language",
@@ -2278,22 +2311,22 @@ async function generateReport(config, projectDir) {
                         bullet: {level: 0},
                         children: [
                             new TextRun({
-                                text: "ISO C17",
+                                text: config.report.language,
                                 font: "Arial",
                                 size: 22
                             }),
                         ]
                     }),
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: "Compiles with gcc and clang",
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: "Compiles with gcc and clang",
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
                     new Paragraph({
                         text: "Documents",
                         heading: HeadingLevel.HEADING_1,
@@ -2353,7 +2386,7 @@ async function generateReport(config, projectDir) {
                     new Paragraph({
                         children: [
                             new TextRun({
-                                text: "<whatever you need, data, graphs, etc…>",
+                                text: config.report.findings,
                                 font: "Arial",
                                 size: 22
                             })
