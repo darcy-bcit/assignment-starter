@@ -3,10 +3,10 @@ const docx = require('docx');
 const path = require("path");
 const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak, Table, TableOfContents, TableRow, TableCell, WidthType, ExternalHyperlink } = require("docx");
 
-async function generateUserGuide(projectDir) {
+async function generateUserGuide(config, projectDir) {
     const docPath = path.join(projectDir, "report", "user-guide.docx");
 
-    const Table1 = new Table({
+    const envTable = new Table({
         rows: [
             new TableRow({
                 children: [
@@ -20,7 +20,7 @@ async function generateUserGuide(projectDir) {
                                 alignment: AlignmentType.CENTER,
                                 children: [
                                     new TextRun({
-                                        text: "Variable",
+                                        text: "variable",
                                         bold: true,
                                         font: "Arial",
                                         size: 22
@@ -62,7 +62,7 @@ async function generateUserGuide(projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "",
+                                        text: config.userGuide.env.variable,
                                         font: "Arial",
                                         size: 22
                                     })
@@ -79,7 +79,7 @@ async function generateUserGuide(projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "",
+                                        text: config.userGuide.env.purpose,
                                         font: "Arial",
                                         size: 22
                                     })
@@ -92,7 +92,93 @@ async function generateUserGuide(projectDir) {
         ],
     });
 
-    const Table2 = new Table({
+    const configTable = new Table({
+        rows: [
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "variable",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                alignment: AlignmentType.CENTER,
+                                children: [
+                                    new TextRun({
+                                        text: "Purpose",
+                                        bold: true,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+    
+            new TableRow({
+                children: [
+                    new TableCell({
+                        width: {
+                            size: 1000,
+                            type: WidthType.DXA
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: config.userGuide.configuration.variable,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                    new TableCell({
+                        width: {
+                            size: 7000,
+                            type: WidthType.DXA,
+                        },
+                        children: [
+                            new Paragraph({
+                                children: [
+                                    new TextRun({
+                                        text: config.userGuide.configuration.purpose,
+                                        font: "Arial",
+                                        size: 22
+                                    })
+                                ]
+                            })
+                        ],
+                    }),
+                ],
+            }),
+        ],
+    });
+
+    const cliTable = new Table({
         rows: [
             new TableRow({
                 children: [
@@ -285,21 +371,21 @@ async function generateUserGuide(projectDir) {
                         alignment: AlignmentType.CENTER,
                         children: [
                             new TextRun({
-                                text: "COMP 1234",
+                                text: config.courseNum,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: "Assignment 1\n",
+                                text: config.assignmentName,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: "User-Guide\n",
+                                text: config.projectName,
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
@@ -311,19 +397,19 @@ async function generateUserGuide(projectDir) {
                         alignment: AlignmentType.LEFT,
                         children: [
                             new TextRun({
-                                text: "FULL NAME",
+                                text: config.author,
                                 font: "Arial",
                                 size: "22",
                                 break: true
                             }),
                             new TextRun({
-                                text: "STUDENT NUMBER",
+                                text: config.studentNum,
                                 font: "Arial",
                                 size: "22",
                                 break: true
                             }),
                             new TextRun({
-                                text: "DATE",
+                                text: config.date,
                                 font: "Arial",
                                 size: "22",
                                 break: true
@@ -343,7 +429,7 @@ async function generateUserGuide(projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "This program demonstrates how to write a program for the course.",
+                                        text: config.purpose,
                                         size: 24,
                                         font: "Arial",
                                     })
@@ -357,67 +443,88 @@ async function generateUserGuide(projectDir) {
                                 text: "Obtaining",
                                 heading: HeadingLevel.HEADING_2,
                             }),
+                            // new Paragraph({
+                            //     children: [
+                            //         new TextRun({
+                            //             text: "git clone ",
+                            //             font: "Courier New",
+                            //             size: 22
+                            //         }),
+                            //         new ExternalHyperlink({
+                            //             children: [
+                            //                 new TextRun({
+                            //                     text: "link",
+                            //                     font: "Courier New",
+                            //                     size: 22,
+                            //                     style: "Hyperlink",
+                            //                 }),
+                            //             ],
+                                        
+                            //             link: "https://github.com/"
+                            //         }),
+                            //     ]
+                            // }),
+
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "git clone ",
+                                        text: config.userGuide.installing.obtaining,
                                         font: "Courier New",
                                         size: 22
                                     }),
-                                    new ExternalHyperlink({
-                                        children: [
-                                            new TextRun({
-                                                text: "https://github.com/",
-                                                font: "Courier New",
-                                                size: 22,
-                                                style: "Hyperlink",
-                                            }),
-                                        ],
-                                        
-                                        link: "https://github.com/"
-                                    }),
                                 ]
                             }),
+
                             new Paragraph({
                                 text: "Building",
                                 heading: HeadingLevel.HEADING_2,
                             }),
+                            // new Paragraph({
+                            //     children: [
+                            //         new TextRun({
+                            //             text: "cd",
+                            //             font: "Courier New",
+                            //             size: 22
+                            //         }),
+                            //     ]
+                            // }),
+                            // new Paragraph({
+                            //     children: [
+                            //         new TextRun({
+                            //             text: "./generate-cmakelists.sh",
+                            //             font: "Courier New",
+                            //             size: 22
+                            //         }),
+                            //     ]
+                            // }),
+                            // new Paragraph({
+                            //     children: [
+                            //         new TextRun({
+                            //             text: "./change-compiler.sh -c <compiler>",
+                            //             font: "Courier New",
+                            //             size: 22
+                            //         }),
+                            //     ]
+                            // }),
+                            // new Paragraph({
+                            //     children: [
+                            //         new TextRun({
+                            //             text: "./build.sh",
+                            //             font: "Courier New",
+                            //             size: 22
+                            //         }),
+                            //     ]
+                            // }),
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "cd",
+                                        text: config.userGuide.installing.building,
                                         font: "Courier New",
                                         size: 22
                                     }),
                                 ]
                             }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "./generate-cmakelists.sh",
-                                        font: "Courier New",
-                                        size: 22
-                                    }),
-                                ]
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "./change-compiler.sh -c <compiler>",
-                                        font: "Courier New",
-                                        size: 22
-                                    }),
-                                ]
-                            }),
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: "./build.sh",
-                                        font: "Courier New",
-                                        size: 22
-                                    }),
-                                ]
-                            }),
+                            
                             new Paragraph({
                                 text: "Running",
                                 heading: HeadingLevel.HEADING_2,
@@ -426,7 +533,7 @@ async function generateUserGuide(projectDir) {
                             new Paragraph({
                                 children: [
                                     new TextRun({
-                                        text: "./build/main",
+                                        text: config.userGuide.installing.running,
                                         font: "Courier New",
                                         size: 22
                                     }),
@@ -448,7 +555,7 @@ async function generateUserGuide(projectDir) {
                                 ]
                             }),
     
-                            Table1,
+                            envTable,
                             
                             new Paragraph({
                                 text: "Configuration",
@@ -465,7 +572,7 @@ async function generateUserGuide(projectDir) {
                                 ]
                             }),
     
-                            Table1,
+                            configTable,
                             
                             new Paragraph({
                                 text: "Command Lines Arguments",
@@ -482,7 +589,7 @@ async function generateUserGuide(projectDir) {
                                 ]
                             }),
     
-                            Table2,
+                            cliTable,
                             
                             new Paragraph({
                                 text: "Examples",
@@ -1847,7 +1954,7 @@ async function generateDesign(config, projectDir) {
     fs.writeFileSync(docPath, buffer);
 }
 
-async function generateReport(projectDir) {
+async function generateReport(config, projectDir) {
     const docPath = path.join(projectDir, "report", "report.docx");
     const RequirementsTable = new Table({
         rows: [
@@ -2262,10 +2369,10 @@ async function generateReport(projectDir) {
 }
 
 async function generateDocs(config, projectDir) {
-    await generateReport(projectDir);
+    await generateReport(config, projectDir);
     await generateTesting(config, projectDir);
     await generateDesign(config, projectDir);
-    await generateUserGuide(projectDir);
+    await generateUserGuide(config, projectDir);
 }
 
 module.exports = {generateDocs};
