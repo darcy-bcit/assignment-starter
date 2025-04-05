@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
+const FormSection = ({ data, duplicate, name, noMore, noLabel }) => {
   //save the original data in a state (shallowCopy)
   const [shallowCopy, setshallowCopy] = useState(data)
   const [fields, setFields] = useState(data);
@@ -52,8 +52,11 @@ const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
     setFields(prev => [...prev, ...duplicated]);
   };
 
-  const onAddMoreFields = (index) => {
 
+
+
+
+  const onAddMoreFields = (index) => {
     setFields(prevFields =>
       prevFields.map((ele, i) => {
         console.log(ele)
@@ -89,26 +92,26 @@ const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
       prev.map((ele, i) =>
         i === parentIndex
           ? {
-              ...ele,
-              children: ele.children.map((child, j) =>
-                j === childIndex && child.name === 'fields'
-                  ? {
-                      ...child,
-                      children: [
-                        ...child.children,
-                        { name: 'name', type: 'text', value: '' },
-                        { name: 'type', type: 'text', value: '' },
-                        { name: 'access', type: 'text', value: '' }
-                      ]
-                    }
-                  : child
-              )
-            }
+            ...ele,
+            children: ele.children.map((child, j) =>
+              j === childIndex && child.name === 'fields'
+                ? {
+                  ...child,
+                  children: [
+                    ...child.children,
+                    { name: 'name', type: 'text', value: '' },
+                    { name: 'type', type: 'text', value: '' },
+                    { name: 'access', type: 'text', value: '' }
+                  ]
+                }
+                : child
+            )
+          }
           : ele
       )
     );
   };
-  
+
 
   const onChangeGrandChild = (data, index, childIndex, grandChildIndex) => {
     setFields(prev =>
@@ -137,14 +140,15 @@ const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
       <h2 className="black font-size-20">{name}</h2>
       <form>
         <div className="form-group">
-          {fields.map((ele, index) => 
+          {fields.map((ele, index) =>
             ele.type === 'multiple' ? (
-              <div key={index} className="d-flex flex-row align-items-end justify-content-between w-100 flex-nowrap my-3 ">
+              <div key={index} className="d-flex flex-row align-items-end justify-content-between w-100 flex-nowrap my-3 rounded p-2" style={{ boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}
+              >
 
-                <div className="col-10-div d-flex justify-content-start flex-wrap gap-1" >
-                  
+                <div className="col-10-div d-flex justify-content-start flex-wrap gap-1 " >
+
                   {ele.children.map((child, childIndex) =>
-                  
+
                     child.type === 'multiple' ? (
                       <div key={childIndex} className="d-flex flex-row w-100 align-items-end">
 
@@ -250,12 +254,16 @@ const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
                   )}
 
 
+
+
+
+
                 </div>
 
-                <div className="col-2-div my-2 ms-1">
+                <div className="col-2-div mt-2 ms-4" style={{ marginBottom: '-.5rem' }}>
                   <button
                     onClick={() => onAddMoreFields(ele?.id, ele)}
-                    className="btn btn-primary rounded-circle d-flex align-items-center justify-content-center p-0" style={{ width: '30px', height: '30px' }}
+                    className="btn btn-info rounded-circle d-flex align-items-center justify-content-center p-0" style={{ width: '40px', height: '40px' }}
 
                     type="button"
                   >
@@ -284,8 +292,8 @@ const FormSection = ({ data, duplicate, name, noMore , noLabel}) => {
 
 
                 {name === 'Files' && index === 0 && ele.name === 'name' && (
-                        <h5 className="fw-semibold text-muted mt-3">Types</h5>
-                      )}
+                  <h5 className="fw-semibold text-muted mt-3">Types</h5>
+                )}
 
 
 

@@ -520,7 +520,9 @@ const Generator = () => {
         if (!data || data.length === 0) return {};
 
         const environmentvarsEntry = data.find(ele => ele.name === 'env');
+        console.log(environmentvarsEntry)
         const environmentvarsList = environmentvarsEntry?.children || [];
+        console.log(environmentvarsList)
         const environmentvars = [];
         for (let i = 0; i < environmentvarsList.length; i += 2) {
             environmentvars.push({
@@ -704,34 +706,8 @@ const Generator = () => {
         { name: 'findings', type: 'textarea', value: '' }
     ]);
 
-    const [userGuideBody, setUserGuideBody] = useState([
-        { name: 'purpose', type: 'textarea', value: '' },
-        {
-            name: 'installing', type: 'multiple', children: [
-                { name: 'obtaining', type: 'textarea', value: '' },
-                { name: 'building', type: 'textarea', value: '' },
-                { name: 'running', type: 'textarea', value: '' }
-            ]
-        },
-        {
-            name: 'env', type: 'multiple', children: [
-                { name: 'variable', type: 'text', value: '' },
-                { name: 'purpose', type: 'textarea', value: '' }
-            ]
-        },
-       
-    ]);
 
-    const [testingBody, setTestingBody] = useState([
-        {
-            name: 'testcases',
-            type: 'multiple',
-            children: [
-                { name: 'testname', type: 'text', value: '' },
-                { name: 'expectedres', type: 'text', value: '' },
-            ]
-        }
-    ]);
+  
 
     // use this functin to check if a field is empty. The yaml will not generate
     const validateNotEmpty = (data, fieldName) => {
@@ -878,7 +854,7 @@ const Generator = () => {
             });
 
             //Validation for the user guide body section
-            userGuideBody.forEach(child => {
+            userGuide.forEach(child => {
                 if (child.children && Array.isArray(child.children)) {
                     child.children.forEach(child => {
                         if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
@@ -889,7 +865,7 @@ const Generator = () => {
             });
 
             //Validation for the testing body section
-            testingBody.forEach(child => {
+            testing.forEach(child => {
                 if (child.children && Array.isArray(child.children)) {
                     child.children.forEach(child => {
                         if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
@@ -915,8 +891,8 @@ const Generator = () => {
             files: restructureFiles(files),
             states: restructureStates(states),
             report: restructureReportBody(report),
-            userGuide: restructureUserGuideBody(userGuideBody),
-            testing: restructureTestingBody(testingBody),
+            userGuide: restructureUserGuideBody(userGuide),
+            testing: restructureTestingBody(testing),
 
                 
                  
@@ -1049,7 +1025,7 @@ const Generator = () => {
 
                 <FormSection data={userGuideBody} name={"userGuideBody"} duplicate={(val) => setUserGuideBody(val)} />
 
-                <FormSection data={testingBody} name={"testingBody"} duplicate={(val) => setTestingBody(val)} /> */}
+                <FormSection data={testing} name={"testing"} duplicate={(val) => setTestingBody(val)} /> */}
 
                 <div className="my-2">
                     <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
