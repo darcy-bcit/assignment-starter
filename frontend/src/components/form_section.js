@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
+const FormSection = ({ data, duplicate, name, noMore, noLabel }) => {
   //save the original data in a state (shallowCopy)
   const [shallowCopy, setshallowCopy] = useState(data)
   const [fields, setFields] = useState(data);
@@ -11,114 +11,155 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
   //react hook that will be invoked whenever fields value changes
   //when useEffect invoked it will call duplicate which is a function from the parent component
   useEffect(() => {
-      duplicate(fields)
+    duplicate(fields)
+    console.log(fields)
   }, [fields])
 
   //when typing in the input, we saves the value inside the element based on its index
   const onChange = (data, index) => {
-      setFields(prev =>
-          prev.map((ele, index2) => index === index2 ? { ...ele, value: data?.target?.value } : ele)
-      );
+    setFields(prev =>
+      prev.map((ele, index2) => index === index2 ? { ...ele, value: data?.target?.value } : ele)
+    );
   }
 
   const onChangeChild = (data, index, index2) => {
-      setFields(prev =>
-          prev.map((ele, i) =>
-              i === index
-                  ? {
-                      ...ele,
-                      children: ele.children.map((child, j) =>
-                          j === index2 ? { ...child, value: data?.target?.value } : child
-                      ),
-                  }
-                  : ele
-          )
-      );
+    setFields(prev =>
+      prev.map((ele, i) =>
+        i === index
+          ? {
+            ...ele,
+            children: ele.children.map((child, j) =>
+              j === index2 ? { ...child, value: data?.target?.value } : child
+            ),
+          }
+          : ele
+      )
+    );
   };
 
   const deepCopyField = (field) => {
-      const copy = { ...field };
-      if (field.type === 'multiple' && Array.isArray(field.children)) {
-          copy.children = field.children.map(child => ({ ...child }));
-      }
-      return copy;
+    const copy = { ...field };
+    if (field.type === 'multiple' && Array.isArray(field.children)) {
+      copy.children = field.children.map(child => ({ ...child }));
+    }
+    return copy;
   };
-  
+
   const addFields = () => {
     //We duplicate the original data so the number of added fields is consistent. (for the large parent)
-      const duplicated = initialData.current.map(deepCopyField);
-      setFields(prev => [...prev, ...duplicated]);
+    const duplicated = initialData.current.map(deepCopyField);
+
+    setFields(prev => [...prev, ...duplicated]);
   };
-  
+
+
+
+
+
   const onAddMoreFields = (index) => {
-      setFields(prevFields =>
-          prevFields.map((ele, i) => {
-              if (i !== index || !ele.children) return ele;
+    setFields(prevFields =>
+      prevFields.map((ele, i) => {
+        console.log(ele)
+        if (ele?.id !== index || !ele.children) return ele;
 
-              let newChildSet;
+        let newChildSet = [];
 
-              // Specific handling for configuration (and similar sections)
-              if (ele.name === 'configuration' || ele.name === 'environmentvars') {
-                newChildSet = ele.children.slice(0, 2).map(child => ({
-                  ...child,
-                  value: ''
-                }));
-              } else {
-                // Original logic for other sections (types, etc.)
-                newChildSet = ele.children.map(child => ({
-                  ...child,
-                  value: ''
-                }));
-              }
+        // Specific handling for configuration (and similar sections)
+        if (ele.name === 'configuration' || ele.name === 'environmentvars') {
+          newChildSet = ele.children.slice(0, 2).map(child => ({
+            ...child,
+            value: ''
+          }));
+        } else {
+          // Original logic for other sections (types, etc.)
+          newChildSet = shallowCopy.find(item => item.id === index)?.children;
+        }
 
-              return {
-                ...ele,
-                children: [...ele.children, ...newChildSet]
-              };
-          })
-      );
+        return {
+          ...ele,
+          children: [...ele.children, ...newChildSet]
+        };
+      })
+    );
   };
+
+
+
+
+
+  const onAddMoreNestedFields = (parentIndex, childIndex) => {
+    setFields(prev =>
+      prev.map((ele, i) =>
+        i === parentIndex
+          ? {
+            ...ele,
+            children: ele.children.map((child, j) =>
+              j === childIndex && child.name === 'fields'
+                ? {
+                  ...child,
+                  children: [
+                    ...child.children,
+                    { name: 'name', type: 'text', value: '' },
+                    { name: 'type', type: 'text', value: '' },
+                    { name: 'access', type: 'text', value: '' }
+                  ]
+                }
+                : child
+            )
+          }
+          : ele
+      )
+    );
+  };
+
 
   const onChangeGrandChild = (data, index, childIndex, grandChildIndex) => {
-      setFields(prev =>
-        prev.map((ele, i) =>
-          i === index
-            ? {
-                ...ele,
-                children: ele.children.map((child, j) =>
-                  j === childIndex
-                    ? {
-                        ...child,
-                        children: child.children.map((gc, k) =>
-                          k === grandChildIndex ? { ...gc, value: data.target.value } : gc
-                        ),
-                      }
-                    : child
-                ),
-              }
-            : ele
-        )
-      );
-  };    
+    setFields(prev =>
+      prev.map((ele, i) =>
+        i === index
+          ? {
+            ...ele,
+            children: ele.children.map((child, j) =>
+              j === childIndex
+                ? {
+                  ...child,
+                  children: child.children.map((gc, k) =>
+                    k === grandChildIndex ? { ...gc, value: data.target.value } : gc
+                  ),
+                }
+                : child
+            ),
+          }
+          : ele
+      )
+    );
+  };
 
   return (
-    <div className="my-4 border-bottom-ch ">
+    <div className="my-4 ">
       <h2 className="black font-size-20">{name}</h2>
       <form>
         <div className="form-group">
           {fields.map((ele, index) =>
             ele.type === 'multiple' ? (
-              <div key={index} className="d-flex flex-row align-items-start w-100 flex-wrap">
-                {/* <div className="col d-flex flex-row flex-wrap align-items-start w-100"> */}
-                <div className="col-auto d-flex justify-content-start flex-column mx-1 my-3" style={{ flex: "0 0 50%" }}>
+              <div key={index} className="d-flex flex-row align-items-end justify-content-between w-100 flex-nowrap my-3 rounded p-2" style={{ boxShadow: 'rgba(0, 0, 0, 0.16) 0px 1px 4px' }}
+              >
+
+                <div className="col-10-div d-flex justify-content-start flex-wrap gap-1 " >
+
                   {ele.children.map((child, childIndex) =>
+
                     child.type === 'multiple' ? (
-                      <div key={childIndex} className="d-flex flex-row w-100 align-items-start">
-                        <div className="col d-flex flex-row flex-wrap">
+                      <div key={childIndex} className="d-flex flex-row w-100 align-items-end">
+
+
+                        <div className="col-12 d-flex flex-row align-items-end flex-wrap gap-1" >
                           {child.children.map((gc, gcIndex) => (
+
                             <div
                               key={`${childIndex}-${gcIndex}`}
-                              className="col-3 d-flex flex-column mx-1 my-2"
+                              className="col-6 my-1 d-flex flex-column "
+                              style={{ width: '49.5%' }}
                             >
                               <label className="text-start pb-1 bold font-size-14">{gc.name}</label>
                               <input
@@ -131,33 +172,49 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
                               />
                             </div>
                           ))}
+
+
+
+                          {child.name === 'fields' && (
+                            <div className="col d-flex align-items-start">
+                              <button
+                                type="button"
+                                className="btn my-2 btn-primary rounded-circle d-flex align-items-center justify-content-center p-0"
+                                style={{ width: '30px', height: '30px' }}
+                                onClick={() => onAddMoreNestedFields(index, childIndex)}
+                              >
+                                <i className="bi bi-plus" />
+                              </button>
+                            </div>
+                          )}
+
                         </div>
-  
-                        {/* 👉 Plus button BESIDE nested grandchild section (e.g. parameters) */}
+
+                        {/*Plus button BESIDE nested grandchild section (e.g. parameters) */}
                         {child.name === 'parameters' && (
-                          <div className="col-auto d-flex align-items-start mt-4 ms-2">
+                          <div className="col d-flex align-items-start ">
                             <button
                               type="button"
-                              className="btn btn-primary rounded-circle p-1"
+                              className="btn my-2 btn-primary rounded-circle d-flex align-items-center justify-content-center p-0" style={{ width: '30px', height: '30px' }}
                               onClick={() => {
                                 setFields(prev =>
                                   prev.map((el, i) =>
                                     i === index
                                       ? {
-                                          ...el,
-                                          children: el.children.map((c, j) =>
-                                            j === childIndex
-                                              ? {
-                                                  ...c,
-                                                  children: [
-                                                    ...c.children,
-                                                    { name: 'name', type: 'text', value: '' },
-                                                    { name: 'type', type: 'text', value: '' }
-                                                  ]
-                                                }
-                                              : c
-                                          )
-                                        }
+                                        ...el,
+                                        children: el.children.map((c, j) =>
+                                          j === childIndex
+                                            ? {
+                                              ...c,
+                                              children: [
+                                                ...c.children,
+                                                { name: 'name', type: 'text', value: '' },
+                                                { name: 'type', type: 'text', value: '' }
+                                              ]
+                                            }
+                                            : c
+                                        )
+                                      }
                                       : el
                                   )
                                 );
@@ -169,10 +226,11 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
                         )}
                       </div>
                     ) : (
-                      // 🧱 Regular child field
+                      // Regular child field
                       <div
                         key={childIndex}
-                        className="col-3 d-flex justify-content-start flex-column mx-1 my-3"
+                        style={{ width: '49.5%' }}
+                        className="col-6 my-1 d-flex justify-content-start flex-column"
                       >
                         <label className="text-start pb-1 bold font-size-14">{child.name}</label>
                         {child.type === 'text' ? (
@@ -190,16 +248,23 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
                             rows="3"
                           />
                         )}
+
                       </div>
                     )
                   )}
+
+
+
+
+
+
                 </div>
-  
-                {/* 🔁 Original "Add More Fields" button */}
-                <div className="col-2">
+
+                <div className="col-2-div mt-2 ms-4" style={{ marginBottom: '-.5rem' }}>
                   <button
-                    onClick={() => onAddMoreFields(index)}
-                    className="mt-4 btn btn-primary rounded-circle d-flex align-items-center justify-content-center p-1"
+                    onClick={() => onAddMoreFields(ele?.id, ele)}
+                    className="btn btn-info rounded-circle d-flex align-items-center justify-content-center p-0" style={{ width: '40px', height: '40px' }}
+
                     type="button"
                   >
                     <i className="bi bi-plus"></i>
@@ -207,8 +272,8 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
                 </div>
               </div>
             ) : (
-              <div key={index} className="d-flex justify-content-start flex-column my-3">
-                <label className="text-start pb-1 bold font-size-14">{ele.name}</label>
+              <div key={index} className="d-flex justify-content-start flex-column my-3 col-10-div me-6">
+                <label className="text-start pb-1 bold font-size-14">{!noLabel ? ele.name : ''}</label>
                 {ele.type === 'text' ? (
                   <input
                     type="text"
@@ -224,12 +289,20 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
                     rows="3"
                   />
                 )}
+
+
+                {name === 'Files' && index === 0 && ele.name === 'name' && (
+                  <h5 className="fw-semibold text-muted mt-3">Types</h5>
+                )}
+
+
+
               </div>
             )
           )}
         </div>
         {/* Check if a section is supposed to be able to add a new field. eg. language vs project name.*/}
-        {allowAddMore && (
+        {!noMore && (
           <button
             type="button"
             onClick={addFields}
@@ -238,10 +311,10 @@ const FormSection = ({ data, duplicate, name, allowAddMore = true }) => {
             Add More Fields
           </button>
         )}
-        </form>
-      </div>
-    );
-  
+      </form>
+    </div>
+  );
+
 };
 
 export default FormSection;
