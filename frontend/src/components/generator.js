@@ -4,7 +4,7 @@ import yaml from "js-yaml";
 import '../styles/generator.css'
 
 //change to true to bypass all validation checks 
-const devMode = true;
+const devMode = false;
 
 
 const Generator = () => {
@@ -154,24 +154,7 @@ const Generator = () => {
     ]);
 
 
-    // react hook that saves a state 
-    // dataTypes is the name of the variable (state)
-    // setDataTypes is a function that change the value of the state
-    //
 
-    // datatypes: #Data Types section of design doc.
-    // - arguments: 
-    //     - field: argc
-    //       type: integer
-    //       description: "The number of arguments"
-    //   settings:
-    //     - field: count
-    //       type: unsigned integer
-    //       description: "The number of times to display the message"
-    //   context:
-    //     - field: arguments
-    //       type: arguments
-    //       description: "The command line arguments"
 
     const [yamlContent, setYamlContent] = useState("");
     const [yamlFileName, setYamlFileName] = useState("");
@@ -198,13 +181,7 @@ const Generator = () => {
         { id: 3, name: 'Description', type: 'text', value: '' }
     ]);
 
-    // const [language, setLanguage] = useState([
-    //     { id: 1, name: 'Language', type: 'text', value: '' }
-    // ]);
 
-    // const [projectName, setProjectName] = useState([
-    //     { id: 1, name: 'Project Name', type: 'text', value: '' }
-    // ]);
     const [types, setTypes] = useState([
         { id: 1, name: 'name', type: 'text', value: '' },  // Simple key-value pairs
         { id: 2, name: 'type', type: 'text', value: '' },
@@ -264,38 +241,6 @@ const Generator = () => {
             ]
         }
     ]);
-
-    const [stateTable, setStateTable] = useState([
-        { id: 1, name: 'From State', type: 'text', value: '' },
-        { id: 2, name: 'To State', type: 'text', value: '' },
-        { id: 3, name: 'Function', type: 'text', value: '' }
-    ]);
-
-    const [pseudocode, setPseudocode] = useState([
-        { id: 1, name: 'functionname', type: 'text', value: '' },
-        {
-            id: 2,
-            name: 'parameters',
-            type: 'multiple',
-            children: [
-                { id: 1, name: 'parameter', type: 'text', value: '' },
-                { id: 2, name: 'type', type: 'text', value: '' },
-                { id: 3, name: 'description', type: 'text', value: '' }
-            ]
-        },
-        {
-            id: 3,
-            name: 'return',
-            type: 'multiple',
-            children: [
-                { id: 1, name: 'value', type: 'text', value: '' },
-                { id: 2, name: 'reason', type: 'text', value: '' }
-            ]
-        },
-        { id: 4, name: 'pseudocode', type: 'textarea', value: '' }
-    ]);
-
-
 
 
 
@@ -479,42 +424,7 @@ const Generator = () => {
         }, {});
     };
 
-    const restructurePseudocode = (data) => {
-        if (!data || data.length === 0) return [];
 
-        const functionNameEntry = data.find(ele => ele.name === 'functionname');
-        const pseudocodeEntry = data.find(ele => ele.name === 'pseudocode');
-
-        const parametersEntry = data.find(ele => ele.name === 'parameters');
-        const parametersList = parametersEntry?.children || [];
-
-        const returnEntry = data.find(ele => ele.name === 'return');
-        const returnList = returnEntry?.children || [];
-
-        const parameters = [];
-        for (let i = 0; i < parametersEntry?.children.length; i += 3) {  // ✅ increment by 3
-            parameters.push({
-                parameter: parametersEntry.children[i]?.value || "",
-                type: parametersEntry.children[i + 1]?.value || "",
-                description: parametersEntry.children[i + 2]?.value || ""
-            });
-        }
-
-        const returns = [];
-        for (let i = 0; i < (data.find(ele => ele.name === 'return')?.children?.length || 0); i += 2) {
-            returns.push({
-                value: data.find(ele => ele.name === 'return').children[i]?.value || "",
-                reason: data.find(ele => ele.name === 'return').children[i + 1]?.value || ""
-            });
-        }
-
-        return {
-            functionname: functionNameEntry?.value || "",
-            parameters: parameters,
-            return: returns,
-            pseudocode: pseudocodeEntry?.value || ""
-        };
-    };
 
     const restructureUserGuideBody = (data) => {
         if (!data || data.length === 0) return {};
@@ -579,44 +489,6 @@ const Generator = () => {
         }
 
         return states;
-    };
-
-
-    const restructureTypes = (data) => {
-        if (!data || data.length === 0) return [];
-
-        const result = [];
-
-        for (let i = 0; i < data.length; i += 4) {
-            const nameEntry = data[i];
-            const typeEntry = data[i + 1];
-            const accessEntry = data[i + 2];
-            const fieldsEntry = data[i + 3];
-
-            const fields = [];
-            if (fieldsEntry?.children) {
-                for (let j = 0; j < fieldsEntry.children.length; j++) {
-                    const name = fieldsEntry.children[j];
-                    const type = fieldsEntry.children[j + 1];
-                    if (name?.name === 'name' && type?.name === 'type') {
-                        fields.push({
-                            name: name.value || '',
-                            type: type.value || ''
-                        });
-                        j++; // skip the next one (already used)
-                    }
-                }
-            }
-
-            result.push({
-                name: nameEntry?.value || '',
-                type: typeEntry?.value || '',
-                access: accessEntry?.value || '',
-                fields
-            });
-        }
-
-        return result;
     };
 
 
@@ -819,28 +691,9 @@ const Generator = () => {
                 });
             });
 
-            //Validation for stateTable section may or may not be needed???
+          
 
-            //Validation for the pseudocode section
-            pseudocode.forEach(child => {
-                if (child.children && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (child.name === "description" || child.name === "reason") {
-                            if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-                        } else {
-                            if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-                            if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
-                        }
-                    })
-                } else {
-                    if (child.name === "functionname") {
-                        if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-                        if (!isValidName(child.value, `Pseudocode section ${child.name}`)) return;
-                    } else {
-                        if (!validateNotEmpty(child.value, `Pseudocode section ${child.name}`)) return;
-                    }
-                }
-            });
+            
 
             //Validation for the report body section
             reportBody.forEach(child => {
@@ -907,7 +760,7 @@ const Generator = () => {
         const yamlData = yaml.dump(formattedData);
 
 
-        setYamlContent(yamlData); // ✅ Store YAML for download
+        setYamlContent(yamlData); //Store YAML for download
 
         console.log(yamlData + "\n");
         alert("YAML generated successfully. Check the console for the output.");
@@ -1001,31 +854,6 @@ const Generator = () => {
                     </div>
                 </div>
 
-                {/* <FormSection data={projectName} name={"Project Name"} duplicate={(val) => setProjectName(val)} allowAddMore={false} />
-
-                <FormSection data={types} name={"Types"} duplicate={(val) => setTypes(val)} />
-
-                <FormSection data={settings} name={"Settings"} duplicate={(val) => setSettings(val)} />
-
-
-                <FormSection data={files} name={"files"} duplicate={(val) => setFiles(val)} />
-
-                <FormSection data={states} name={"states"} duplicate={(val) => setStates(val)} />
-
-                <FormSection data={titlePage} name={"titlePage"} duplicate={(val) => setTitlePage(val)} />
-
-                <FormSection data={purpose} name={"purpose"} duplicate={(val) => setPurpose(val)} />
-
-                <FormSection data={dataTypes} name={"dataTypes"} duplicate={(val) => setDataTypes(val)} />
-
-                <FormSection data={stateTable} name={"stateTable"} duplicate={(val) => setStateTable(val)} />
-
-
-                <FormSection data={reportBody} name={"reportBody"} duplicate={(val) => setReportBody(val)} />
-
-                <FormSection data={userGuideBody} name={"userGuideBody"} duplicate={(val) => setUserGuideBody(val)} />
-
-                <FormSection data={testing} name={"testing"} duplicate={(val) => setTestingBody(val)} /> */}
 
                 <div className="my-2">
                     <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
@@ -1033,7 +861,7 @@ const Generator = () => {
                 {/* </div>
                 </div> */}
 
-                {/* ✅ Show Download button only if YAML is generated */}
+                {/* Show Download button only if YAML is generated */}
                 {yamlContent && (
                     <div className="my-2">
                         <input
