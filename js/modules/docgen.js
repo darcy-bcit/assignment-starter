@@ -877,122 +877,6 @@ async function generateTesting(config, projectDir) {
 async function generateDesign(config, projectDir) {
     const docPath = path.join(projectDir, "report", "design.docx");
 
-    const argHeader = new TableRow({
-        children: [
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Field", bold: true, font: "Arial", size: 22 })] })]
-            }),
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Type", bold: true, font: "Arial", size: 22 })] })]
-            }),
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Description", bold: true, font: "Arial", size: 22 })] })]
-            }),
-        ]
-    });
-    const argRows = [
-        argHeader,
-        new TableRow({
-            children: [
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "argc", font: "Arial", size: 22 })] })]
-                }),
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "integer", font: "Arial", size: 22 })] })]
-                }),
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "The number of arguments", font: "Arial", size: 22 })] })]
-                }),
-            ]
-        }),
-        new TableRow({
-            children: [
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "argv", font: "Arial", size: 22 })] })]
-                }),
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "char**", font: "Arial", size: 22 })] })]
-                }),
-                new TableCell({
-                    width: { size: 3000, type: WidthType.DXA },
-                    children: [new Paragraph({ children: [new TextRun({ text: "The command line arguments", font: "Arial", size: 22 })] })]
-                }),
-            ]
-        }),
-    ];
-    const ArgTable = new Table({ rows: argRows });
-
-    const settingHeader = new TableRow({
-        children: [
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Field", bold: true, font: "Arial", size: 22 })] })]
-            }),
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Type", bold: true, font: "Arial", size: 22 })] })]
-            }),
-            new TableCell({
-                width: { size: 3000, type: WidthType.DXA },
-                children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Description", bold: true, font: "Arial", size: 22 })] })]
-            }),
-        ]
-    });
-    //Left empty row
-    const emptySettingRow = new TableRow({
-        children: [
-            new TableCell({ width: { size: 3000, type: WidthType.DXA }, children: [new Paragraph("")] }),
-            new TableCell({ width: { size: 3000, type: WidthType.DXA }, children: [new Paragraph("")] }),
-            new TableCell({ width: { size: 3000, type: WidthType.DXA }, children: [new Paragraph("")] }),
-        ]
-    });
-    const SettingTable = new Table({ rows: [settingHeader, emptySettingRow] });
-
-    const ConTable = new Table({
-        rows: [
-            new TableRow({
-                children: [
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Field", bold: true, font: "Arial", size: 22 })] })]
-                    }),
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Type", bold: true, font: "Arial", size: 22 })] })]
-                    }),
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Description", bold: true, font: "Arial", size: 22 })] })]
-                    })
-                ]
-            }),
-            new TableRow({
-                children: [
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ children: [new TextRun({ text: "arguments", font: "Arial", size: 22 })] })]
-                    }),
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ children: [new TextRun({ text: "Arguments", font: "Arial", size: 22 })] })]
-                    }),
-                    new TableCell({
-                        width: { size: 3000, type: WidthType.DXA },
-                        children: [new Paragraph({ children: [new TextRun({ text: "The command line arguments", font: "Arial", size: 22 })] })]
-                    }),
-                ]
-            }),
-        ]
-    });
-
     const funHeader = new TableRow({
         children: [
             new TableCell({
@@ -1101,6 +985,145 @@ async function generateDesign(config, projectDir) {
         });
     }
     const StateTabTable = new Table({ rows: stateTabRows });
+
+    let datatypeSections = [];
+
+    if (config.files && Array.isArray(config.files)) {
+        config.files.forEach(file => {
+            if (file.types && Array.isArray(file.types)) {
+                file.types.forEach(type => {
+                    // Type name as Heading 2
+                    datatypeSections.push(new Paragraph({
+                        text: type.name,
+                        heading: HeadingLevel.HEADING_2
+                    }));
+
+                    // Type description
+                    datatypeSections.push(new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: type.description || "(No description provided)",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }));
+
+                    // Table header
+                    let fieldRows = [
+                        new TableRow({
+                            children: [
+                                new TableCell({
+                                    width: { size: 2000, type: WidthType.DXA },
+                                    children: [
+                                        new Paragraph({
+                                            alignment: AlignmentType.CENTER,
+                                            children: [
+                                                new TextRun({
+                                                    text: "Field",
+                                                    bold: true,
+                                                    font: "Arial",
+                                                    size: 22
+                                                })
+                                            ]
+                                        })
+                                    ]
+                                }),
+                                new TableCell({
+                                    width: { size: 2000, type: WidthType.DXA },
+                                    children: [
+                                        new Paragraph({
+                                            alignment: AlignmentType.CENTER,
+                                            children: [
+                                                new TextRun({
+                                                    text: "Type",
+                                                    bold: true,
+                                                    font: "Arial",
+                                                    size: 22
+                                                })
+                                            ]
+                                        })
+                                    ]
+                                }),
+                                new TableCell({
+                                    width: { size: 5000, type: WidthType.DXA },
+                                    children: [
+                                        new Paragraph({
+                                            alignment: AlignmentType.CENTER,
+                                            children: [
+                                                new TextRun({
+                                                    text: "Description",
+                                                    bold: true,
+                                                    font: "Arial",
+                                                    size: 22
+                                                })
+                                            ]
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
+                    ];
+
+                    // Field rows
+                    if (type.fields && Array.isArray(type.fields)) {
+                        type.fields.forEach(field => {
+                            fieldRows.push(new TableRow({
+                                children: [
+                                    new TableCell({
+                                        children: [
+                                            new Paragraph({
+                                                children: [
+                                                    new TextRun({
+                                                        text: field.name,
+                                                        font: "Arial",
+                                                        size: 22
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    }),
+                                    new TableCell({
+                                        children: [
+                                            new Paragraph({
+                                                children: [
+                                                    new TextRun({
+                                                        text: field.type,
+                                                        font: "Arial",
+                                                        size: 22
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    }),
+                                    new TableCell({
+                                        children: [
+                                            new Paragraph({
+                                                children: [
+                                                    new TextRun({
+                                                        text: "", // leave description blank
+                                                        font: "Arial",
+                                                        size: 22
+                                                    })
+                                                ]
+                                            })
+                                        ]
+                                    })
+                                ]
+                            }));
+                        });
+                    }
+
+                    let fieldTable = new Table({ rows: fieldRows });
+                    datatypeSections.push(fieldTable);
+                });
+            }
+        });
+    }
+
+
+  
 
      //Array to hold all pseudocode sections (one per function)
     let pseudocodeSections = [];
@@ -1480,54 +1503,7 @@ async function generateDesign(config, projectDir) {
                         text: "Data Types",
                         heading: HeadingLevel.HEADING_1,
                     }),
-
-                    new Paragraph({
-                        text: "Arguments",
-                        heading: HeadingLevel.HEADING_2,
-                    }),
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Purpose: To hold the unparsed command-line argument information",
-                                size: 24,
-                                font: "Arial",
-                                break: true
-                            })
-                        ]
-                    }),
-                    ArgTable,
-
-                    new Paragraph({
-                        text: "Settings",
-                        heading: HeadingLevel.HEADING_2,
-                    }),
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Purpose: To hold the settings the program needs to run.",
-                                size: 24,
-                                font: "Arial",
-                                break: true
-                            })
-                        ]
-                    }),
-                    SettingTable,
-
-                    new Paragraph({
-                        text: "Context",
-                        heading: HeadingLevel.HEADING_2,
-                    }),
-                    new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: "Purpose: To hold the arguments, settings, and exit information",
-                                size: 24,
-                                font: "Arial",
-                                break: true
-                            })
-                        ]
-                    }),
-                    ConTable,
+                    ...datatypeSections,
 
                     new Paragraph({
                         text: "Functions",
