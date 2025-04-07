@@ -80,6 +80,46 @@ files:
         comment: Display a message to the user
         pseudocode: |
           Print message to stdout
+      - name: usage
+        parameters:
+          - name: program_name
+            type: char*
+        returnType: void
+        access: public
+        comment: Display usage information
+        pseudocode: |
+          Print usage information to stdout
+      - name: cleanup
+        parameters:
+          - name: config
+            type: Config*
+        returnType: void
+        access: public
+        comment: Clean up resources
+        pseudocode: |
+          Free allocated memory for config
+      - name: exit
+        parameters:
+          - name: code
+            type: int
+        returnType: void
+        access: public
+        comment: Exit the program with a given code
+        pseudocode: |
+          Exit the program with the specified exit code
+      - name: handle_args
+        parameters:
+          - name: argc
+            type: int
+          - name: argv
+            type: char**
+        returnType: int
+        access: public
+        comment: Handle command line arguments
+        pseudocode: |
+          Check if arguments are valid
+          Process each argument and update config
+          Return success or error code
 
 states: # Define the states in your program
   - name: START

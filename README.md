@@ -78,6 +78,9 @@ options:
   -h, --help      Print this usage information
 ```
 ### Yaml Builder
+
+A branch called gh-pages can be deployed using github pages feature.
+
 You can either use the deployed version at [https://darcy-bcit.github.io/assignment-starter]
 
 or deploy manually:
