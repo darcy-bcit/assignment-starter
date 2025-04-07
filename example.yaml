@@ -36,12 +36,12 @@ files:
         returnType: void
         access: # Access modifier (public/private/protected) if needed
         description: |
-          # This function demonstrates an example of how to write function documentation
-          # It accepts two parameters: an integer and a double, and returns nothing.
+          This function demonstrates an example of how to write function documentation
+          It accepts two parameters: an integer and a double, and returns nothing.
         pseudocode: |
-          # 1. Accept two parameters: param1 and param2.
-          # 2. Perform a task or computation using the parameters.
-          # 3. Return nothing (void function).
+          1. Accept two parameters: param1 and param2.
+          2. Perform a task or computation using the parameters.
+          3. Return nothing (void function).
   - name: utils
     types:
       - name: Config
