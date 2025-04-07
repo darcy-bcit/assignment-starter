@@ -385,7 +385,7 @@ async function generateUserGuide(config, projectDir) {
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: config.projectName,
+                                text: "User-Guide",
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
@@ -1544,6 +1544,44 @@ async function generateDesign(config, projectDir) {
 
 async function generateReport(config, projectDir) {
     const docPath = path.join(projectDir, "report", "report.docx");
+
+    // const platforms = () => {
+    //     for (let i = 0; i < config.report.platforms.length; i++) {
+    //         return new Paragraph({
+    //             bullet: {level: 0},
+    //             children: [
+    //                 new TextRun({
+    //                     text: config.report.platforms[i],
+    //                     font: "Arial",
+    //                     size: 22
+    //                 }),
+    //             ]
+    //         })
+    //     }
+    // };
+
+    const platforms = () => {
+        const paragraphs = [];
+    
+        for (let i = 0; i < config.report.platforms.length; i++) {
+            paragraphs.push(
+                new Paragraph({
+                    bullet: { level: 0 },
+                    children: [
+                        new TextRun({
+                            text: config.report.platforms[i],
+                            font: "Arial",
+                            size: 22
+                        }),
+                    ]
+                })
+            );
+        }
+    
+        return paragraphs;
+    };
+    
+
     const RequirementsTable = new Table({
         rows: [
             new TableRow({
@@ -1733,7 +1771,7 @@ async function generateReport(config, projectDir) {
                             }),
                             new TextRun({break: 1}),
                             new TextRun({
-                                text: config.projectName,
+                                text: "Report",
                                 size: "52",
                                 color: "000000",
                                 font: "Arial"
@@ -1858,36 +1896,38 @@ async function generateReport(config, projectDir) {
                     //     ]
                     // }),
 
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: config.report.platforms[0],
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: config.report.platforms[1],
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
-                    new Paragraph({
-                        bullet: {level: 0},
-                        children: [
-                            new TextRun({
-                                text: config.report.platforms[2],
-                                font: "Arial",
-                                size: 22
-                            }),
-                        ]
-                    }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: config.report.platforms[0],
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: config.report.platforms[1],
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+                    // new Paragraph({
+                    //     bullet: {level: 0},
+                    //     children: [
+                    //         new TextRun({
+                    //             text: config.report.platforms[2],
+                    //             font: "Arial",
+                    //             size: 22
+                    //         }),
+                    //     ]
+                    // }),
+
+                    ...platforms(),
 
 
     
