@@ -1,6 +1,6 @@
 {
-  "name": "yaml_generator",
-  "version": "0.1.0",
+  "name": "yaml-builder",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^5.3.3",
