@@ -4,63 +4,68 @@ import yaml from "js-yaml";
 import '../styles/generator.css'
 
 //change to true to bypass all validation checks 
-const devMode = false;
+const devMode = false; 
+
+const fieldsThatNeedNameCheck = ['projectName', 'name', 'type', 'access'];
+
+
+
 
 
 const Generator = () => {
 
     const [author, setAuthor] = useState([
-        { id: 1, name: 'author', type: 'text', value: '' }
+        { id: 1, name: 'author', type: 'text', value: '', error: '' }
     ]);
     const [studentNum, setStudentNum] = useState([
-        { id: 1, name: 'studentNum', type: 'text', value: '' }
+        { id: 1, name: 'studentNum', type: 'text', value: '', error: '' }
     ]);
     const [date, setDate] = useState([
-        { id: 1, name: 'date', type: 'text', value: '' }
+        { id: 1, name: 'date', type: 'text', value: '', error: '' }
     ]);
     const [assignmentName, setAssignmentName] = useState([
-        { id: 1, name: 'courseNum', type: 'text', value: '' }
+        { id: 1, name: 'courseNum', type: 'text', value: '', error: '' }
     ]);
     const [courseNum, setCourseNum] = useState([
-        { id: 1, name: 'courseNum', type: 'text', value: '' }
+        { id: 1, name: 'courseNum', type: 'text', value: '', error: '' }
     ]);
     const [projectName, setProjectName] = useState([
-        { id: 1, name: 'projectName', type: 'text', value: '' }
+        { id: 1, name: 'projectName', type: 'text', value: '', error: ''}
     ]);
     const [language, setLanguage] = useState([
-        { id: 1, name: 'language', type: 'text', value: '' }
+        { id: 1, name: 'language', type: 'text', value: '', error: '' }
     ]);
     const [githubPath, setGithubPath] = useState([
-        { id: 1, name: 'githubPath', type: 'text', value: '' }
+        { id: 1, name: 'githubPath', type: 'text', value: '', error: '' }
     ]);
     const [purpose, setPurpose] = useState([
-        { id: 1, name: 'purpose', type: 'text', value: '' }
+        { id: 1, name: 'purpose', type: 'text', value: '', error: '' }
     ]);
     const [license, setLicense] = useState([
-        { id: 1, name: 'license', type: 'text', value: '' }
+        { id: 1, name: 'license', type: 'text', value: '', error: '' }
     ]);
 
 
     const [files, setFiles] = useState([
-        { id: 1, name: 'name', type: 'text', value: '' },
+        { id: 1, name: 'name', type: 'text', value: '', error: '' },
         {
             id: 2,
             name: 'types',
             type: 'multiple',
             children: [
-                { id: 1, name: 'name', type: 'text', value: '' },
-                { id: 2, name: 'dataType', type: 'text', value: '' },
+                { id: 1, name: 'name', type: 'text', value: '', error: '' },
+                { id: 2, name: 'dataType', type: 'text', value: '', error: '' },
 
-                { id: 3, name: 'access', type: 'text', value: '' },
-                { id: 4, name: 'description', type: 'text', value: '' },
+                { id: 3, name: 'access', type: 'text', value: '', error: '' },
+                { id: 4, name: 'description', type: 'text', value: '', error: '' },
                 {
                     id: 2,
                     name: 'fields',
                     type: 'multiple',
                     children: [
-                        { id: 1, name: 'name', type: 'text', value: '' },
-                        { id: 2, name: 'type', type: 'text', value: '' },
-                        { id: 3, name: 'access', type: 'text', value: '' }
+                        { id: 1, name: 'name', type: 'text', value: '', error: '' },
+                        { id: 2, name: 'type', type: 'text', value: '', error: '' },
+                        { id: 3, name: 'access', type: 'text', value: '', error: '' }
                     ]
                 },
             ],
@@ -70,34 +75,34 @@ const Generator = () => {
             name: 'functions',
             type: 'multiple',
             children: [
-                { id: 1, name: 'name', type: 'text', value: '' },
+                { id: 1, name: 'name', type: 'text', value: '', error: '' },
                 {
                     id: 2,
                     name: 'parameters',
                     type: 'multiple',
                     children: [
-                        { id: 1, name: 'name', type: 'text', value: '' },
-                        { id: 2, name: 'type', type: 'text', value: '' }
+                        { id: 1, name: 'name', type: 'text', value: '', error: '' },
+                        { id: 2, name: 'type', type: 'text', value: '', error: '' },
                     ]
                 },
-                { id: 3, name: 'returnType', type: 'text', value: '' },
-                { id: 4, name: 'access', type: 'text', value: '' },
-                { id: 5, name: 'description', type: 'textarea', value: '' },
-                { id: 6, name: 'pseudocode', type: 'textarea', value: '' }
+                { id: 3, name: 'returnType', type: 'text', value: '', error: '' },
+                { id: 4, name: 'access', type: 'text', value: '', error: '' },
+                { id: 5, name: 'description', type: 'textarea', value: '', error: '' },
+                { id: 6, name: 'pseudocode', type: 'textarea', value: '', error: '' },
             ]
         }
     ]);
 
     const [states, setStates] = useState([
-        { id: 1, name: 'name', type: 'text', value: '' },
-        { id: 2, name: 'description', type: 'text', value: '' },
+        { id: 1, name: 'name', type: 'text', value: '', error: '' },
+        { id: 2, name: 'description', type: 'text', value: '', error: '' },
         {
             id: 3,
             name: 'transitions',
             type: 'multiple',
             children: [
-                { id: 1, name: 'to', type: 'text', value: '' },
-                { id: 2, name: 'function', type: 'text', value: '' },
+                { id: 1, name: 'to', type: 'text', value: '', error: '' },
+                { id: 2, name: 'function', type: 'text', value: '', error: '' },
             ]
         },
     ]);
@@ -109,13 +114,13 @@ const Generator = () => {
             name: 'requirements',
             type: 'multiple',
             children: [
-                { id: 1, name: 'req', type: 'text', value: '' },
-                { id: 2, name: 'status', type: 'text', value: '' }
+                { id: 1, name: 'req', type: 'text', value: '', error: '' },
+                { id: 2, name: 'status', type: 'text', value: '', error: '' }
             ]
         },
-        { id: 2, name: 'platforms', type: 'textarea', value: '' },
-        { id: 3, name: 'language', type: 'text', value: '' },
-        { id: 4, name: 'findings', type: 'textarea', value: '' }
+        { id: 2, name: 'platforms', type: 'textarea', value: '', error: '' },
+        { id: 3, name: 'language', type: 'text', value: '', error: '' },
+        { id: 4, name: 'findings', type: 'textarea', value: '', error: '' },
     ]);
 
     const [userGuide, setUserGuide] = useState([
@@ -124,9 +129,9 @@ const Generator = () => {
             name: 'installing',
             type: 'multiple',
             children: [
-                { id: 1, name: 'obtaining', type: 'textarea', value: '' },
-                { id: 2, name: 'building', type: 'textarea', value: '' },
-                { id: 3, name: 'running', type: 'textarea', value: '' }
+                { id: 1, name: 'obtaining', type: 'textarea', value: '', error: '' },
+                { id: 2, name: 'building', type: 'textarea', value: '', error: '' },
+                { id: 3, name: 'running', type: 'textarea', value: '', error: '' }
             ]
         },
         {
@@ -134,8 +139,8 @@ const Generator = () => {
             name: 'env',
             type: 'multiple',
             children: [
-                { id: 1, name: 'variable', type: 'text', value: '' },
-                { id: 2, name: 'purpose', type: 'textarea', value: '' }
+                { id: 1, name: 'variable', type: 'text', value: '', error: '' },
+                { id: 2, name: 'purpose', type: 'textarea', value: '', error: '' }
             ]
         }
     ]);
@@ -147,8 +152,8 @@ const Generator = () => {
             name: 'testcases',
             type: 'multiple',
             children: [
-                { id: 1, name: 'name', type: 'text', value: '' },
-                { id: 2, name: 'expected', type: 'text', value: '' }
+                { id: 1, name: 'name', type: 'text', value: '', error: '' },
+                { id: 2, name: 'expected', type: 'text', value: '', error: '' }
             ]
         }
     ]);
@@ -156,58 +161,13 @@ const Generator = () => {
 
 
 
-    const [yamlContent, setYamlContent] = useState("");
-    const [yamlFileName, setYamlFileName] = useState("");
-
-    // Function to trigger YAML file download
-    const downloadYAML = () => {
-        if (!yamlContent) return;
-
-        const blob = new Blob([yamlContent], { type: "text/yaml" });
-        const url = URL.createObjectURL(blob);
-        const safeFileName = yamlFileName.trim() || "generated"; // Default to 'generated' if empty
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${safeFileName}.yaml`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
-    const [settings, setSettings] = useState([
-        { id: 1, name: 'Field', type: 'text', value: '' },
-        { id: 2, name: 'Type', type: 'text', value: '' },
-        { id: 3, name: 'Description', type: 'text', value: '' }
-    ]);
-
-
-    const [types, setTypes] = useState([
-        { id: 1, name: 'name', type: 'text', value: '' },  // Simple key-value pairs
-        { id: 2, name: 'type', type: 'text', value: '' },
-        { id: 3, name: 'access', type: 'text', value: '' },
-        {
-            id: 4, name: 'fields', type: 'multiple', children: [
-                { name: 'name', type: 'text', value: '', isSingle: false },
-                { name: 'type', type: 'text', value: '', isSingle: false }  // Keep 'type' for fields
-            ]
-        }
-    ]);
+   
 
 
 
+  
 
-    const [titlePage, setTitlePage] = useState([
-        { id: 1, name: 'name', type: 'text', value: '' },
-        { id: 2, name: 'stdnum', type: 'text', value: '' },
-        { id: 3, name: 'date', type: 'text', value: '' },
-        { id: 4, name: 'assignment', type: 'text', value: '' },
-        { id: 5, name: 'coursenum', type: 'text', value: '' }
-    ]);
-
-    // const [purpose, setPurpose] = useState([
-    //     { id: 1, name: 'purpose', type: 'textarea', value: '' }
-    // ]);
+  
 
     const [dataTypes, setDataTypes] = useState([
         {
@@ -215,9 +175,9 @@ const Generator = () => {
             name: 'arguments',
             type: 'multiple',
             children: [
-                { id: 1, name: 'Field', type: 'text', value: '' },
-                { id: 2, name: 'Type', type: 'text', value: '' },
-                { id: 3, name: 'Description', type: 'text', value: '' }
+                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
             ]
         },
         {
@@ -225,9 +185,9 @@ const Generator = () => {
             name: 'settings',
             type: 'multiple',
             children: [
-                { id: 1, name: 'Field', type: 'text', value: '' },
-                { id: 2, name: 'Type', type: 'text', value: '' },
-                { id: 3, name: 'Description', type: 'text', value: '' }
+                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
             ]
         },
         {
@@ -235,9 +195,9 @@ const Generator = () => {
             name: 'context',
             type: 'multiple',
             children: [
-                { id: 1, name: 'Field', type: 'text', value: '' },
-                { id: 2, name: 'Type', type: 'text', value: '' },
-                { id: 3, name: 'Description', type: 'text', value: '' }
+                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
             ]
         }
     ]);
@@ -428,32 +388,35 @@ const Generator = () => {
 
     const restructureUserGuideBody = (data) => {
         if (!data || data.length === 0) return {};
-
+      
+        const installingEntry = data.find(ele => ele.name === 'installing');
+        const installingChildren = installingEntry?.children || [];
+      
+        const obtaining = installingChildren.find(c => c.name === 'obtaining')?.value || "";
+        const building = installingChildren.find(c => c.name === 'building')?.value || "";
+        const running = installingChildren.find(c => c.name === 'running')?.value || "";
+      
         const environmentvarsEntry = data.find(ele => ele.name === 'env');
-        console.log(environmentvarsEntry)
         const environmentvarsList = environmentvarsEntry?.children || [];
-        console.log(environmentvarsList)
         const environmentvars = [];
+      
         for (let i = 0; i < environmentvarsList.length; i += 2) {
-            environmentvars.push({
-                variable: environmentvarsList[i]?.value || "",
-                purpose: environmentvarsList[i + 1]?.value || ""
-            });
+          environmentvars.push({
+            variable: environmentvarsList[i]?.value || "",
+            purpose: environmentvarsList[i + 1]?.value || ""
+          });
         }
-
-
-
+      
         return {
-            installing: 
-                {
-                    obtaining: "",
-                    building: "",
-                    running: ""
-                }
-            ,
-            env: environmentvars,
+          installing: {
+            obtaining,
+            building,
+            running
+          },
+          env: environmentvars,
         };
-    };
+      };
+      
 
 
     const restructureStates = (data) => {
@@ -463,9 +426,8 @@ const Generator = () => {
         let i = 0;
 
         while (i < data.length) {
-            const currentState = data.slice(i, i + 3); // Expecting From State, description, transitions
-
-            const name = currentState.find(d => d.name === 'From State')?.value || '';
+            const currentState = data.slice(i, i + 3); 
+            const name = currentState.find(d => d.name === 'name')?.value || '';
             const description = currentState.find(d => d.name === 'description')?.value || '';
             const transitionsEntry = currentState.find(d => d.name === 'transitions');
             const transitions = [];
@@ -512,8 +474,6 @@ const Generator = () => {
         const platforms = data.find(ele => ele.name === 'platforms')?.value || "";
         const languageList = data.find(ele => ele.name === 'language')?.value || "";
 
-        // const languageEntry = data.find(ele => ele.name === 'language');
-        // const languageList = (languageEntry?.children || []).map(lang => lang.value || "");
 
         const findings = data.find(ele => ele.name === 'findings')?.value || "";
 
@@ -549,336 +509,221 @@ const Generator = () => {
 
 
 
+    const [yamlContent, setYamlContent] = useState("");
+    const [yamlFileName, setYamlFileName] = useState("");
 
+    // Function to trigger YAML file download
+    const downloadYAML = () => {
+        if (!yamlContent) return;
 
-    const [reportBody, setReportBody] = useState([
-        { name: 'purpose', type: 'textarea', value: '' },
-        {
-            name: 'requirements',
-            type: 'multiple',
-            children: [
-                { name: 'req', type: 'text', value: '' },
-                { name: 'status', type: 'text', value: '' }
-            ]
-        },
-        {
-            name: 'platforms',
-            type: 'multiple',
-            children: [
-                { name: 'platform', type: 'textarea', value: '' }
-            ]
-        },
-        {
-            name: 'language',
-            type: 'multiple',
-            children: [
-                { name: 'language', type: 'textarea', value: '' }
-            ]
-        },
-        { name: 'findings', type: 'textarea', value: '' }
-    ]);
+        const blob = new Blob([yamlContent], { type: "text/yaml" });
+        const url = URL.createObjectURL(blob);
+        const safeFileName = yamlFileName.trim() || "generated"; // Default to 'generated' if empty
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${safeFileName}.yaml`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+   
 
 
   
 
     // use this functin to check if a field is empty. The yaml will not generate
-    const validateNotEmpty = (data, fieldName) => {
-        if (!data || data.trim().length === 0) {
-            alert(`${fieldName} cannot be empty.`);
-            return false;
-        }
-        return true;
+    const validateNotEmpty = (value) => {
+        return value?.trim().length > 0;
+      };
+
+    const isValidName = (name) => {
+    const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+    return validPattern.test(name);
     };
 
-    const isValidName = (name, fieldName) => {
-        if (!name) return false; // Already checked in previous step
 
-        const validPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/; // Must start with a letter or underscore, no special chars
 
-        if (!validPattern.test(name)) {
-            alert(`${fieldName} contains invalid characters. Use only letters, numbers, and underscores (cannot start with a number).`);
-            return false;
+    const validateField = (field, name) => {
+        const result = { ...field };
+      
+        if (!validateNotEmpty(field.value)) {
+          result.error = `${name} cannot be empty`;
+          console.warn(`Empty field: ${name}`);
+          return { valid: false, updated: result };
         }
-
-        return true;
-    };
-
-    //save the states in an object then dump it for yaml
-    const generateYaml = () => {
-
-        if (!devMode) {
-
-            //Language paramter must be filled
-            if (!validateNotEmpty(language[0].value, "Language")) return;
-
-            //Project Name parameter must be filled and have valid syntax
-            if (!validateNotEmpty(projectName[0].value, "Project Name")) return;
-            if (!isValidName(projectName[0].value, "Project Name")) return;
-
-            //Validation for the types section (need to refactor this to be more dynamic and also less confusing of the user)
-            types.forEach(child => {
-                //Deal with the nested object differently here
-                if (child.name === "fields" && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
-                        if (!isValidName(child.value, `Types section ${child.name}`)) return;
-                    });
-                } else {
-                    if (!validateNotEmpty(child.value, `Types section ${child.name}`)) return;
-                    if (!isValidName(child.value, `Types section ${child.name}`)) return;
-                }
-            });
-
-            //No validation needed for the settings section
-
-            //Validation for the files section
-            files.forEach(child => {
-                //Deal with nested object differently here
-                if (child.name === "functions" && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (child.name === "parameters" && Array.isArray(child.children)) {
-                            //There needs to be another loop here to deal with the nested parameters object
-                            console.log("skippped files parameters");
-                        } else {
-                            if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
-                            if (!isValidName(child.value, `Files section ${child.name}`)) return;
-                        }
-                    });
-                } else {
-                    if (!validateNotEmpty(child.value, `Files section ${child.name}`)) return;
-                    if (!isValidName(child.value, `Files section ${child.name}`)) return;
-                }
-            })
-
-            //Validation for the states section
-            states.forEach(child => {
-                //Deal with the nested object differently here
-                if (child.name === "transitions" && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        //Deal with the nested object differently here
-                        console.log("skippped states section transitions");
-                    });
-                } else {
-                    if (child.name === "From State") {
-                        if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
-                        if (!isValidName(child.value, `States section ${child.name}`)) return;
-                    }
-                    if (!validateNotEmpty(child.value, `States section ${child.name}`)) return;
-                }
-            });
-
-            //Validation for the title page section
-            titlePage.forEach(child => {
-                if (!validateNotEmpty(child.value, `Title Page section ${child.name}`)) return;
-            });
-
-            //Validation for project purpose section
-            purpose.forEach(child => {
-                if (!validateNotEmpty(child.value, `Purpose section ${child.name}`)) return;
-            });
-
-            console.log(dataTypes);
-            //Validation for the data types section
-            dataTypes.forEach(child => {
-                //Deal with the nested object differently here
-                child.children.forEach(child => {
-                    if (child.name === "Description") {
-                        if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
-                    } else {
-                        if (!validateNotEmpty(child.value, `Data Types section ${child.name}`)) return;
-                        if (!isValidName(child.value, `Data Types section ${child.name}`)) return;
-                    }
-                });
-            });
-
-          
-
-            
-
-            //Validation for the report body section
-            reportBody.forEach(child => {
-                if (child.children && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
-                    })
-                } else {
-                    if (!validateNotEmpty(child.value, `Report Body section ${child.name}`)) return;
-                }
-            });
-
-            //Validation for the user guide body section
-            userGuide.forEach(child => {
-                if (child.children && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
-                    })
-                } else {
-                    if (!validateNotEmpty(child.value, `User guide section ${child.name}`)) return;
-                }
-            });
-
-            //Validation for the testing body section
-            testing.forEach(child => {
-                if (child.children && Array.isArray(child.children)) {
-                    child.children.forEach(child => {
-                        if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
-                    })
-                } else {
-                    if (!validateNotEmpty(child.value, `Testing section ${child.name}`)) return;
-                }
-            });
+      
+        if (fieldsThatNeedNameCheck.includes(field.name) && !isValidName(field.value)) {
+          result.error = `${name} must start with a letter/_ and use only letters, numbers, _`;
+          console.warn(`Invalid name format: ${name} (${field.value})`);
+          return { valid: false, updated: result };
         }
-        console.log(author)
+      
+        result.error = '';
+        return { valid: true, updated: result };
+      };
+      
+      
 
-        const formattedData = {
-            author: restructure(author),
-            studentNum: restructure(studentNum),
-            date: restructure(date),
-            assignmentName: restructure(assignmentName),
-            courseNum: restructure(courseNum),
-            projectName: restructure(projectName),
-            language: restructure(language),
-            githubPath: restructure(githubPath),
-            purpose: restructure(purpose),
-            license: restructure(license),
-            files: restructureFiles(files),
-            states: restructureStates(states),
-            report: restructureReportBody(report),
-            userGuide: restructureUserGuideBody(userGuide),
-            testing: restructureTestingBody(testing),
 
-                
-                 
-                
+      const validateSection = (section, setSection, sectionName) => {
+        let isValid = true;
+      
+        const deepValidate = (fields) =>
+          fields.map((field) => {
+            const copy = { ...field };
+      
+            if (field.type === "multiple" && Array.isArray(field.children)) {
+              copy.children = deepValidate(field.children);
+            } else {
+              const { valid, updated } = validateField(field, `${sectionName}: ${field.name}`);
+              if (!valid) {
+                console.warn(`[${sectionName}] Field failed: ${field.name} = '${field.value}'`);
+                isValid = false;
+              }
+              copy.error = updated.error;
+            }
+      
+            return copy;
+          });
+      
+        const updated = deepValidate(section);
+        setSection(updated);
+        return isValid;
+      };
+      
+      
 
-            
-
+      const generateYaml = () => {
+        if (devMode) {
+          generateFinalYaml();
+          return;
+        }
+      
+        let allValid = true;
+        const validationResults = {
+          language: validateSection(language, setLanguage, "Language"),
+          projectName: validateSection(projectName, setProjectName, "Project Name"),
+          files: validateSection(files, setFiles, "Files"),
+          states: validateSection(states, setStates, "States"),
+        //   titlePage: validateSection(titlePage, setTitlePage, "Title Page"),
+          purpose: validateSection(purpose, setPurpose, "Purpose"),
+        //   dataTypes: validateSection(dataTypes, setDataTypes, "Data Types"),
+          reportBody: validateSection(report, setReport, "Report Body"),
+          userGuide: validateSection(userGuide, setUserGuide, "User Guide"),
+          testing: validateSection(testing, setTesting, "Testing")
         };
+      
+        allValid = Object.values(validationResults).every(result => result);
+        
+        if (!allValid) {
+          // Show which sections failed validation
+          const failedSections = Object.entries(validationResults)
+            .filter(([_, valid]) => !valid)
+            .map(([section]) => section);
+          
+          alert(`Validation failed in: ${failedSections.join(', ')}`);
+          return;
+        }
+      
+        generateFinalYaml();
+      };
 
-
-
+      const generateFinalYaml = () => {
+        const formattedData = {
+          author: restructure(author),
+          studentNum: restructure(studentNum),
+          date: restructure(date),
+          assignmentName: restructure(assignmentName),
+          courseNum: restructure(courseNum),
+          projectName: restructure(projectName),
+          language: restructure(language),
+          githubPath: restructure(githubPath),
+          purpose: restructure(purpose),
+          license: restructure(license),
+          files: restructureFiles(files),
+          states: restructureStates(states),
+          report: restructureReportBody(report),
+          userGuide: restructureUserGuideBody(userGuide),
+          testing: restructureTestingBody(testing),
+        };
+      
         const yamlData = yaml.dump(formattedData);
-
-
-        setYamlContent(yamlData); //Store YAML for download
-
+        setYamlContent(yamlData);
+      
         console.log(yamlData + "\n");
         alert("YAML generated successfully. Check the console for the output.");
-    };
+      };
 
-    return (
-        <>
-            <div className="container py-5">
+        
+    
 
-                {/* <div className="card box-shadow border-0 p-3">
-                    <div className="card-body"> */}
-                {/* component that generate the inputs based on the state */}
-
-
-
-                <div className="card box-shadow  border-0 p-1">
-                    <div className="card-body">
-                        <div className="border-bottom-ch">
-                            <FormSection data={author} name={"Author"} duplicate={(val) => setAuthor(val)} noLabel noMore/>
-                        </div>
-
-                        <div className="border-bottom-ch">
-                            <FormSection data={studentNum} name={"Student Number"} duplicate={(val) => setStudentNum(val)} noLabel noMore />
-                        </div>
-
-                        <div className="border-bottom-ch">
-                            <FormSection data={date} name={"Date"} duplicate={(val) => setDate(val)} noLabel noMore />
-                        </div>
-
-
-                        <div className="border-bottom-ch">
-                            <FormSection data={assignmentName} name={"Assignment Name"} duplicate={(val) => setAssignmentName(val)} noLabel noMore />
-                        </div>
-
-                        <div className="border-bottom-ch">
-                            <FormSection data={courseNum} name={"course Number"} duplicate={(val) => setCourseNum(val)} noLabel noMore />
-                        </div>
-
-                        <div className="border-bottom-ch">
-                            <FormSection data={projectName} name={"Project Name"} duplicate={(val) => setProjectName(val)} noLabel noMore />
-                        </div>
-                        <div className="border-bottom-ch">
-                            <FormSection data={language} name={"Language"} duplicate={(val) => setLanguage(val)} noLabel  noMore/>
-                        </div>
-                        <div className="border-bottom-ch">
-                            <FormSection data={githubPath} name={"Github Path"} duplicate={(val) => setGithubPath(val)} noLabel noMore/>
-                        </div>
-                        <div className="border-bottom-ch">
-                            <FormSection data={purpose} name={"Purpose"} duplicate={(val) => setPurpose(val)} noLabel noMore/>
-                        </div>
-                        <div className="">
-                            <FormSection data={license} name={"License"} duplicate={(val) => setLicense(val)} noLabel  noMore/>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card box-shadow  border-0 p-1 my-3">
-                    <div className="card-body">
-                        <div className="border-bottom-ch">
-                            <FormSection data={files} name={"Files"} duplicate={(val) => setFiles(val)} />
-                        </div>
-
-                        <div className="">
-                            <FormSection data={states} name={"States"} duplicate={(val) => setStates(val)} />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card box-shadow  border-0 p-1 my-3">
-                    <div className="card-body">
-                        <div className="">
-                            <FormSection data={report} name={"Report"} duplicate={(val) => setReport(val)} />
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="card box-shadow  border-0 p-1 my-3">
-                    <div className="card-body">
-                        <div className="">
-                            <FormSection data={userGuide} name={"User Guide"} duplicate={(val) => setUserGuide(val)} />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="card box-shadow  border-0 p-1 my-3">
-                    <div className="card-body">
-                        <div className="">
-                            <FormSection data={testing} name={"Testing"} duplicate={(val) => setTesting(val)} />
-                        </div>
-                    </div>
-                </div>
-
-
-                <div className="my-2">
-                    <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen"> Generate</button>
-                </div>
-                {/* </div>
-                </div> */}
-
-                {/* Show Download button only if YAML is generated */}
-                {yamlContent && (
-                    <div className="my-2">
-                        <input
-                            type="text"
-                            className="form-control mb-2"
-                            placeholder="Enter file name (without .yaml)"
-                            value={yamlFileName}
-                            onChange={(e) => setYamlFileName(e.target.value)}
-                        />
-                        <button onClick={downloadYAML} className="btn btn-success w-100 bold">
-                            Download YAML
-                        </button>
-                    </div>
-                )}
+      return (
+        <div className="container py-5">
+          <div className="card box-shadow border-0 p-1">
+            <div className="card-body">
+              <FormSection data={author} name="Author" duplicate={setAuthor} noLabel noMore />
+              <FormSection data={studentNum} name="Student Number" duplicate={setStudentNum} noLabel noMore />
+              <FormSection data={date} name="Date" duplicate={setDate} noLabel noMore />
+              <FormSection data={assignmentName} name="Assignment Name" duplicate={setAssignmentName} noLabel noMore />
+              <FormSection data={courseNum} name="Course Number" duplicate={setCourseNum} noLabel noMore />
+              <FormSection data={projectName} name="Project Name" duplicate={setProjectName} noLabel noMore />
+              <FormSection data={language} name="Language" duplicate={setLanguage} noLabel noMore />
+              <FormSection data={githubPath} name="GitHub Path" duplicate={setGithubPath} noLabel noMore />
+              <FormSection data={purpose} name="Purpose" duplicate={setPurpose} noLabel noMore />
+              <FormSection data={license} name="License" duplicate={setLicense} noLabel noMore />
             </div>
-        </>
-    );
+          </div>
+    
+          <div className="card box-shadow border-0 p-1 my-3">
+            <div className="card-body">
+              <FormSection data={files} name="Files" duplicate={setFiles} />
+              <FormSection data={states} name="States" duplicate={setStates} />
+            </div>
+          </div>
+    
+          <div className="card box-shadow border-0 p-1 my-3">
+            <div className="card-body">
+              <FormSection data={report} name="Report" duplicate={setReport} />
+            </div>
+          </div>
+    
+          <div className="card box-shadow border-0 p-1 my-3">
+            <div className="card-body">
+              <FormSection data={userGuide} name="User Guide" duplicate={setUserGuide} />
+            </div>
+          </div>
+    
+          <div className="card box-shadow border-0 p-1 my-3">
+            <div className="card-body">
+              <FormSection data={testing} name="Testing" duplicate={setTesting} />
+            </div>
+          </div>
+          
+    
+          <div className="my-2">
+            <button onClick={generateYaml} className="btn btn-primary w-100 bold button-gen">
+              Generate
+            </button>
+          </div>
+    
+          {yamlContent && (
+            <div className="my-2">
+              <input
+                type="text"
+                className="form-control mb-2"
+                placeholder="Enter file name (without .yaml)"
+                value={yamlFileName}
+                onChange={(e) => setYamlFileName(e.target.value)}
+              />
+              <button onClick={downloadYAML} className="btn btn-success w-100 bold">
+                Download YAML
+              </button>
+            </div>
+          )}
+        </div>
+      );
 };
 
 export default Generator;
