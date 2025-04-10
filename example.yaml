@@ -1,158 +1,336 @@
-#MELKE YAML TEMPLATE
-#Please fill in the fields to customize your project generation
-
-author: Pat Doe
+# This is example yaml documents the cli program
+author: MELKE
 studentNum: A00000000
-date: Feb 30th, 2020
-assignmentName: Assignment 1
-courseNum: COMP 1234
-projectName: ExampleProject
-language: c # supported: c, c++, go, python, java, javascript
-githubPath: github.com/pat-doe/ExampleProject # -- primarily for Go
-purpose: Show how to use this assignment-starter
+date: April 9th, 2025
+assignmentName: assignment-starter
+courseNum: COMP 3800
+projectName: assignment-starter
+language: javascript
+githubPath: github.com/darcy-bcit/assignment-starter
+purpose: This program is used as a starting point for assignments in the Data Communication option for CST at BCIT.
 license: MIT
 
 files:
-  - name: geometry
-    types: # Define types used in your project (eg. struct, class)
-    - name: EXAMPLE_TYPE
-      dataType: struct # Struct/Type/Class/Interface
-      access: # Access modifier (public/private/protected) if needed
-      description: This is an example of a type
-      fields: # Define the fields inside the type
-        - name: username
-          type: string
-          access: public
-        - name: password
-          type: string
-          access: public
-    functions: # Define the functions in your project
-      - name: exampleFunction
-        parameters: # List the parameters that the function takes
-          - name: param1
-            type: int
-          - name: param2
-            type: double
-        returnType: void
-        access: # Access modifier (public/private/protected) if needed
-        description: |
-          This function demonstrates an example of how to write function documentation
-          It accepts two parameters: an integer and a double, and returns nothing.
-        pseudocode: |
-          1. Accept two parameters: param1 and param2.
-          2. Perform a task or computation using the parameters.
-          3. Return nothing (void function).
-  - name: utils
-    types:
-      - name: Config
-        dataType: struct
-        access: public
-        description: config data type
-        fields:
-          - name: name
-            type: char*
-            access: public
-          - name: value
-            type: int
-            access: public
+  - name: cli
     functions:
-      - name: parse_args
-        parameters:
-          - name: argc
-            type: int
-          - name: argv
-            type: char**
-        returnType: int
-        access: public
-        description: Parse command line arguments
+      - name: parseArgs
+        parameters: []
+        returnType: Object
+        access:
+        description: Check command line arguments for option flags
         pseudocode: |
-          Check number of arguments
-          Process each argument
-          Return success or error code
-  - name: message
+          define option flag i, input, string 
+          define option flag o, output, string
+          define option flag g, generate, [code, docs, all]
+          define option flag h, help, boolean
+          check args for options and return args object
+      - name: printUsage
+        parameters: []
+        returnType: void
+        access:
+        description: Print program usage message to console
+        pseudocode: print usage message with i, o, g, h option flags
+      - name: validateArgs
+        parameters:
+          - name: args
+            type: Object
+        returnType: void
+        access:
+        description: Check args object for required fields
+        pseudocode: throw error if input field is not found in args
+  - name: config-parser
     functions:
-      - name: display_message
+      - name: parse
         parameters:
-          - name: msg
-            type: char*
+          - name: filePath
+            type: String
         returnType: void
-        access: public
-        comment: Display a message to the user
+        access: 
+        description: Open and parse the yaml file found at filePath
         pseudocode: |
-          Print message to stdout
-      - name: usage
-        parameters:
-          - name: program_name
-            type: char*
-        returnType: void
-        access: public
-        comment: Display usage information
-        pseudocode: |
-          Print usage information to stdout
-      - name: cleanup
+          open the file at filePath for reading
+          load contents into an object called config
+          call applyDefaults function passing config
+          call validateConfig function passing config
+          throw error if fail
+      - name: applyDefaults
         parameters:
           - name: config
-            type: Config*
+            type: Object
         returnType: void
-        access: public
-        comment: Clean up resources
+        access:
+        description: Apply defaults to every field in the config
         pseudocode: |
-          Free allocated memory for config
-      - name: exit
+          assign a default value to all top level keys if value was not found
+          loop through files array
+          assign default value to each field if value is not found
+          end loop
+          loop through states array
+          assign default value to each field if value is not found
+          repeat for report, user guide, and test cases
+      - name: validateConfig
         parameters:
-          - name: code
-            type: int
+          - name: config
+            type: Object
+          - name: filePath
+            type: String
         returnType: void
-        access: public
-        comment: Exit the program with a given code
+        access: 
+        description: Check each field matches the right datatype
         pseudocode: |
-          Exit the program with the specified exit code
-      - name: handle_args
+          Check each top level field
+          loop through files array and check every field
+          loop through states array and check every field
+          repeat for report, user guide, and test cases
+  - name: directory-utils
+    functions:
+      - name: prepareProjectDirectory
         parameters:
-          - name: argc
-            type: int
-          - name: argv
-            type: char**
-        returnType: int
-        access: public
-        comment: Handle command line arguments
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Check the directory path
         pseudocode: |
-          Check if arguments are valid
-          Process each argument and update config
-          Return success or error code
+          call stat on projectDir
+          check if projectDir is a Directory
+          call readdir on projectDir
+          if there are files in the directory
+          call promptUserForClearance to ask if the user wants to clear the directory
+          if yes
+          call clearDirectory
+          call mkdir to create source and report directories
+      - name: clearDirectory
+        parameters:
+          - name: dir
+            type: String
+        returnType: void
+        access:
+        description: remove everything inside the directory
+        pseudocode: |
+          for each file
+          call stat on file
+          if file is a Directory
+          recursively call clearDirectory on file
+          call rmdir on file
+          else call unlink on file
+      - name: promptUserForClearance
+        parameters:
+          - name: dir
+            type: String
+        returnType: Boolean
+        access:
+        description: Ask the user to confirm if they want to clear the contents of this directory
+        pseudocode: |
+          call readline.createInterface passing in stdin and stdout
+          call question and inform the user that the directory already exists and confirm if they want to clear it
+          return true or false
+  - name: docgen
+    functions:
+      - name: generateReport
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Generate Report document based on config
+        pseudocode: |
+          add all fields from config to document
+          save file to projectDir/report/report.docx
+      - name: generateTesting
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Generate Testing document based on config
+        pseudocode: |
+          add all fields from config to document
+          save file to projectDir/report/testing.docx
+      - name: generateDesign
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Generate Design document based on config
+        pseudocode: |
+          add all fields from config to document
+          save file to projectDir/report/design.docx
+      - name: generateUserGuide
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Generate User Guide document based on config
+        pseudocode: |
+          add all fields from config to document
+          save file to projectDir/report/user-guide.docx
+      - name: generateDocs
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Run all generate functions
+        pseudocode: |
+          call generateReport function
+          call generateTesting function
+          call generateDesign function
+          call generateUserGuide function
+  - name: state-diagram
+    functions:
+      - name: generateStateDiagram
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: Run graphviz to create state diagram image and dot file
+        pseudocode: |
+          declare variable dotContent to store dotfile
+          fill dotContent with graphviz boilerplate
+          for each state in config
+          add state transition
+          call writeFile to save dotfile
+          call exec to run graphviz passing the dotfile to generate image
+  - name: base-generator
+    types: 
+      - name: BaseGenerator
+        dataType: class
+        access:
+        description: |
+          Abtract class for code generation.
+          Generation for each language will be based off this class
+        fields: []
+    functions:
+      - name: generate
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: main code generation function
+        pseudocode: |
+          call createSourceDirs
+          for each file in config
+          call generateFile
+          call generateMainFile
+      - name: createSourceDirs
+        parameters:
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: create necessary directories
+        pseudocode:
+      - name: generateFile
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: generate file contents
+        pseudocode:
+      - name: generateMainFile
+        parameters:
+          - name: config
+            type: Object
+          - name: projectDir
+            type: String
+        returnType: void
+        access:
+        description: generate main driver file
+        pseudocode: 
+      - name: writeFile
+        parameters:
+          - name: filePath
+            type: String
+          - name: content
+            type: Object
+        returnType: void
+        access:
+        description: write contents to file
+        pseudocode: |
+          call mkdir to ensure directory exists
+          call writeFile to save contents to file
+  - name: codegen
+    functions:
+      - name: createGenerator
+        parameters:
+          - name: language
+            type: String
+        returnType: BaseGenerator
+        access:
+        description: return generator object depending on language
+        pseudocode: |
+          check language
+          return new generator based on language
 
-states: # Define the states in your program
+states:
   - name: START
     description: Entry point of the program
     transitions:
-      - to: PARSE_ARGS
-        function: parse_args
-  - name: PARSE_ARGS
-    description: Parse command line arguments
+      - to: CLI_PARSE
+        function: parseArgs
+  - name: CLI_PARSE
+    description: parse command line arguments
     transitions:
-      - to: HANDLE_ARGS
-        function: handle_args
       - to: USAGE
-        function: usage
-  - name: HANDLE_ARGS
-    description: Process command line arguments
-    transitions:
-      - to: DISPLAY_MESSAGE
-        function: display_message
-      - to: USAGE
-        function: usage
-  - name: DISPLAY_MESSAGE
-    description: Show message to user
-    transitions:
-      - to: CLEANUP
-        function: cleanup
-  - name: CLEANUP
-    description: Clean up resources
+        function: printUsage
+      - to: VALIDATE
+        function: validateArgs
+  - name: USAGE
+    description: prints usage instructions for this program
     transitions:
       - to: EXIT
         function: exit
-  - name: USAGE
-    description: Display usage information
+  - name: VALIDATE
+    description: validate yaml and fill in defaults
+    transitions:
+      - to: CONFIG_PARSE
+        function: parse
+  - name: CONFIG_PARSE
+    description: Parse the yaml file
+    transitions:
+      - to: PREPARE_DIR
+        function: prepareProjectDirectory
+  - name: PREPARE_DIR
+    description: Prepare necessary directories
+    transitions:
+      - to: GEN_CODE
+        function: generate
+      - to: GEN_FSM
+        function: generateStateDiagram
+  - name: GEN_CODE
+    description: Generate Skeleton code
+    transitions:
+      - to: EXIT
+        function: exit
+  - name: GEN_FSM
+    description: Generate FSM Diagram
+    transitions:
+      - to: GEN_DOCS
+        function: generateDocs
+  - name: GEN_DOCS
+    description: Generate Documentation
     transitions:
       - to: EXIT
         function: exit
@@ -160,42 +338,33 @@ states: # Define the states in your program
     description: Exit the program
 
 report:
-  requirements: #requirements section of report doc.
-    - req: Describe requirement
-      status: Not fully Implemented
-          
-  platforms: #What platforms does the assignment work on
-    - linux
-    - macos
-    - freebsd
-    
-  language: ISO C17
-
-  findings: |
-    List findings here
+  requirements:
+    - req: Take in yaml as input
+      status: Fully Implemented
+    - req: Generate Skeleton code
+      status: Fully Implemented
+    - req: Generate docx files
+      status: Fully Implemented
+    - req: Generate FSM diagram
+      status: Fully Implemented
+  platforms:
+    - Linux
+    - macOs
+    - Windows
+  language: JavaScript
+  findings:
 
 userGuide:
   installing:
-    obtaining: | 
-      fill in with how to clone
-
-    building: |
-      fill in with how to build
-
-    running: |
-      fill in with how to run
-
-  env: # List any environment variables here
-    - variable: variable
-      purpose: |
-        The purpose of this variable is to variable
-
-  configuration: # List any configurations here
-    - variable: variable
-      purpose: |
-        The purpose of this variable is to variable
+    obtaining: git clone https://github.com/darcy-bcit/assignment-starter
+    building: npm i
+    running: node index -i <yaml> -o <dir path> -g [code, docs, all]
 
 testing:
-  testcases: #test cases for testing doc.
-    - name: Send empty command
+  testcases:
+    - name: Code generated
+      expected: pass
+    - name: Docs generated
+      expected: pass
+    - name: FSM diagram generated
       expected: pass
