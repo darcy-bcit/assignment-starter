@@ -269,6 +269,10 @@ async function validateConfig(config, filePath) {
                     if (!transition.function) {
                         errors.push(`Transition at index ${j} in state "${state.name}" is missing a "function" field`);
                     } else {
+                        if (transition.function.toLowerCase() === 'exit') {
+                            break;
+                        }
+
                         let functionExists = false;
                         for (const file of config.files) {
                             if (file.functions && file.functions.some(f => f.name === transition.function)) {

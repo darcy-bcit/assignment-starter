@@ -6,7 +6,7 @@ class JavaScriptGenerator extends BaseGenerator {
         const fs = require('fs').promises;
 
         // Create JavaScript-specific directories
-        await fs.mkdir(path.join(projectDir, 'source', 'src'), { recursive: true });
+        await fs.mkdir(path.join(projectDir, 'source', 'modules'), { recursive: true });
         await fs.mkdir(path.join(projectDir, 'source', 'tests'), { recursive: true });
 
         // Also ensure the report directory exists
@@ -19,7 +19,7 @@ class JavaScriptGenerator extends BaseGenerator {
         }
 
         const fileName = this.toCamelCase(fileConfig.name) + '.js';
-        const filePath = path.join(projectDir, 'source', 'src', fileName);
+        const filePath = path.join(projectDir, 'source', 'modules', fileName);
 
         let content = `/**
  * @fileoverview ${fileConfig.name} module
@@ -150,7 +150,7 @@ class JavaScriptGenerator extends BaseGenerator {
     }
 
     async generateMainFile(config, projectDir) {
-        const mainPath = path.join(projectDir, 'source', 'src', 'index.js');
+        const mainPath = path.join(projectDir, 'source', 'index.js');
 
         let content = `/**
  * @fileoverview Main entry point for the application
@@ -162,7 +162,7 @@ class JavaScriptGenerator extends BaseGenerator {
         for (const fileConfig of config.files) {
             if (fileConfig.name) {
                 const moduleName = this.toCamelCase(fileConfig.name);
-                content += `const ${moduleName} = require('./${moduleName}');\n`;
+                content += `const ${moduleName} = require('./modules/${moduleName}');\n`;
             }
         }
         content += '\n';
