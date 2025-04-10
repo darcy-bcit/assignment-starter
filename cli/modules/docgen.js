@@ -1,7 +1,7 @@
 const fs = require('fs');
 const docx = require('docx');
 const path = require("path");
-const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak, Table, TableOfContents, TableRow, TableCell, WidthType, ExternalHyperlink } = require("docx");
+const { Document, Paragraph, TextRun, HeadingLevel, AlignmentType, PageBreak, Table, TableOfContents, TableRow, TableCell, WidthType, ExternalHyperlink, ImageRun } = require("docx");
 
 async function generateUserGuide(config, projectDir) {
     const docPath = path.join(projectDir, "report", "user-guide.docx");
@@ -1138,23 +1138,7 @@ async function generateDesign(config, projectDir) {
                         heading: HeadingLevel.HEADING_2
                     }));
 
-                    // Pseudocode heading
-                    pseudocodeSections.push(new Paragraph({
-                        text: "Pseudocode",
-                        heading: HeadingLevel.HEADING_3
-                    }));
-
-                    // Pseudocode text (if available)
-                    pseudocodeSections.push(new Paragraph({
-                        children: [
-                            new TextRun({
-                                text: func.pseudocode || "(No pseudocode provided)",
-                                size: 24,
-                                font: "Arial",
-                                break: true
-                            })
-                        ]
-                    }));
+                    
 
                     // Parameters section
                     pseudocodeSections.push(new Paragraph({
@@ -1348,10 +1332,46 @@ async function generateDesign(config, projectDir) {
                     }));
                     let dynamicReturnTable = new Table({ rows: returnRows });
                     pseudocodeSections.push(dynamicReturnTable);
+
+                    // Pseudocode heading
+                    pseudocodeSections.push(new Paragraph({
+                        text: "Pseudocode",
+                        heading: HeadingLevel.HEADING_3
+                    }));
+
+                    // Pseudocode text (if available)
+                    pseudocodeSections.push(new Paragraph({
+                        children: [
+                            new TextRun({
+                                text: func.pseudocode || "(No pseudocode provided)",
+                                size: 24,
+                                font: "Arial",
+                                break: true
+                            })
+                        ]
+                    }));
                 });
             }
         });
     }
+
+
+    const graphImage = new ImageRun({
+        type: 'png',
+        data: fs.readFileSync(path.join(projectDir, "report", "state.png")),
+        transformation: {
+            width: 600,
+            height: 600
+        }
+    });
+
+    if(graphImage === null) {
+        graphImage = new Paragraph({
+            text: "Insert FSM image here"
+        })
+    }
+
+    console.log(path.join(projectDir, "report", "state.png"));
 
     const design = new Document({
         title: "Design",
@@ -1529,6 +1549,11 @@ async function generateDesign(config, projectDir) {
                     }),
 
                     new Paragraph({
+                        alignment: AlignmentType.CENTER,
+                        children: [graphImage]
+                    }),
+
+                    new Paragraph({
                         text: "Pseudocode",
                         heading: HeadingLevel.HEADING_1,
                     }),
@@ -1580,10 +1605,11 @@ async function generateReport(config, projectDir) {
     
         return paragraphs;
     };
-    
 
-    const RequirementsTable = new Table({
-        rows: [
+    const tasks = () => {
+        const table = [];
+
+        table.push(
             new TableRow({
                 children: [
                     new TableCell({
@@ -1626,59 +1652,76 @@ async function generateReport(config, projectDir) {
                     }),
                 ],
             }),
+        )
     
-            new TableRow({
-                children: [
-                    new TableCell({
-                        width: {
-                            size: 6000,
-                            type: WidthType.DXA
-                        },
-                        children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: config.report.requirements.req,
-                                        font: "Arial",
-                                        size: 22
-                                    })
-                                ]
-                            })
-                        ],
-                    }),
-                    new TableCell({
-                        width: {
-                            size: 2000,
-                            type: WidthType.DXA,
-                        },
-                        children: [
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: config.report.requirements.status,
-                                        font: "Arial",
-                                        size: 22
-                                    })
-                                ]
-                            })
-                        ],
-                    }),
-                ],
-            }),
+        for (let i = 0; i < config.report.platforms.length; i++) {
+
+            table.push(
+                new TableRow({
+                    children: [
+                        new TableCell({
+                            width: {
+                                size: 6000,
+                                type: WidthType.DXA
+                            },
+                            children: [
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    children: [
+                                        new TextRun({
+                                            text: config.report.requirements[i].req,
+                                            bold: true,
+                                            font: "Arial",
+                                            size: 22
+                                        })
+                                    ]
+                                })
+                            ],
+                        }),
+                        new TableCell({
+                            width: {
+                                size: 2000,
+                                type: WidthType.DXA,
+                            },
+                            children: [
+                                new Paragraph({
+                                    alignment: AlignmentType.CENTER,
+                                    children: [
+                                        new TextRun({
+                                            text: config.report.requirements[i].status,
+                                            bold: true,
+                                            font: "Arial",
+                                            size: 22
+                                        })
+                                    ]
+                                })
+                            ],
+                        }),
+                    ],
+                }),
+            );
+        }
     
+        return table;
+    };
     
+
+    const RequirementsTable = new Table({
+        rows: [
             // new TableRow({
             //     children: [
             //         new TableCell({
             //             width: {
             //                 size: 6000,
-            //                 type: WidthType.DXA,
+            //                 type: WidthType.DXA
             //             },
             //             children: [
             //                 new Paragraph({
+            //                     alignment: AlignmentType.CENTER,
             //                     children: [
             //                         new TextRun({
-            //                             text: "(bonus) (if there were a bonus, it would be listed here)",
+            //                             text: "Task",
+            //                             bold: true,
             //                             font: "Arial",
             //                             size: 22
             //                         })
@@ -1693,17 +1736,21 @@ async function generateReport(config, projectDir) {
             //             },
             //             children: [
             //                 new Paragraph({
+            //                     alignment: AlignmentType.CENTER,
             //                     children: [
             //                         new TextRun({
-            //                             text: "Not Implemented",
+            //                             text: "Status",
+            //                             bold: true,
             //                             font: "Arial",
             //                             size: 22
             //                         })
             //                     ]
-            //             })],
+            //                 })
+            //             ],
             //         }),
             //     ],
             // }),
+            ...tasks()
         ],
     });
     
