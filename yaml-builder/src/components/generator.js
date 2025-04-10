@@ -612,7 +612,7 @@ const Generator = () => {
         //   dataTypes: validateSection(dataTypes, setDataTypes, "Data Types"),
           reportBody: validateSection(report, setReport, "Report Body"),
           userGuide: validateSection(userGuide, setUserGuide, "User Guide"),
-          testing: validateSection(testing, setTesting, "Testing")
+//          testing: validateSection(testing, setTesting, "Testing")
         };
       
         allValid = Object.values(validationResults).every(result => result);
