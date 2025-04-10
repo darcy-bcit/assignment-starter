@@ -24,7 +24,7 @@ const Generator = () => {
         { id: 1, name: 'date', type: 'text', value: '', error: '' }
     ]);
     const [assignmentName, setAssignmentName] = useState([
-        { id: 1, name: 'courseNum', type: 'text', value: '', error: '' }
+        { id: 1, name: 'assignmentName', type: 'text', value: '', error: '' }
     ]);
     const [courseNum, setCourseNum] = useState([
         { id: 1, name: 'courseNum', type: 'text', value: '', error: '' }
@@ -169,38 +169,38 @@ const Generator = () => {
 
   
 
-    const [dataTypes, setDataTypes] = useState([
-        {
-            id: 1,
-            name: 'arguments',
-            type: 'multiple',
-            children: [
-                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
-                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
-                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
-            ]
-        },
-        {
-            id: 2,
-            name: 'settings',
-            type: 'multiple',
-            children: [
-                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
-                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
-                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
-            ]
-        },
-        {
-            id: 3,
-            name: 'context',
-            type: 'multiple',
-            children: [
-                { id: 1, name: 'Field', type: 'text', value: '', error: '' },
-                { id: 2, name: 'Type', type: 'text', value: '', error: '' },
-                { id: 3, name: 'Description', type: 'text', value: '', error: '' }
-            ]
-        }
-    ]);
+    // const [dataTypes, setDataTypes] = useState([
+    //     {
+    //         id: 1,
+    //         name: 'arguments',
+    //         type: 'multiple',
+    //         children: [
+    //             { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+    //             { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+    //             { id: 3, name: 'Description', type: 'text', value: '', error: '' }
+    //         ]
+    //     },
+    //     {
+    //         id: 2,
+    //         name: 'settings',
+    //         type: 'multiple',
+    //         children: [
+    //             { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+    //             { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+    //             { id: 3, name: 'Description', type: 'text', value: '', error: '' }
+    //         ]
+    //     },
+    //     {
+    //         id: 3,
+    //         name: 'context',
+    //         type: 'multiple',
+    //         children: [
+    //             { id: 1, name: 'Field', type: 'text', value: '', error: '' },
+    //             { id: 2, name: 'Type', type: 'text', value: '', error: '' },
+    //             { id: 3, name: 'Description', type: 'text', value: '', error: '' }
+    //         ]
+    //     }
+    // ]);
 
 
 
@@ -281,7 +281,7 @@ const Generator = () => {
     };
     
 
-    //change the structure of the data from [{ name: '', type: '', value: '' }] to [{the_element_name: the element_value}]
+  
     const restructure = (data) => {
         if (!data || data.length === 0) return "";
 
@@ -318,7 +318,7 @@ const Generator = () => {
                     }).filter(func => func !== null);
                 }
 
-                // CORRECTED THIS PART SPECIFICALLY:
+                
                 else if (['arguments', 'settings', 'context'].includes(ele.name)) {
                     acc[ele.name] = [];
 
@@ -344,7 +344,7 @@ const Generator = () => {
                                 name: curr?.value || "",
                                 type: next?.value || ""
                             });
-                            i++; // skip the 'type' since we already used it
+                            i++; 
                         }
                     }
                 }
